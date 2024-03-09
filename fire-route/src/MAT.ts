@@ -1,9 +1,6 @@
 /**
  * MAT.ts
  * Provides packaged functions for MAT/SAT compute.
- * TODO:
- * 
- * @author Bob YX Lee
  */
 
 import { findMats, getPathsFromStr, Mat, traverseEdges, toScaleAxis, isTerminating, matCurveToNextVertex, getCurveToNext } from 'flo-mat';
@@ -51,7 +48,8 @@ function getCubicBezierPathStr(ps: number[][]) {
 export function drawMats(
         mats: Mat[],
         svg: SVGSVGElement,
-        type: string /* 'mat' | 'sat' */) {
+        type: string, /* 'mat' | 'sat' */
+        headless: bool = false) {
 
     let beziers = [];
     mats.forEach(f);
@@ -70,31 +68,35 @@ export function drawMats(
             if (isTerminating(cpNode)){return}
             let bezier = getCurveToNext(cpNode);
             if (!bezier) { return; }
-            //console.log(bezier);
-            let $path = document.createElementNS(NS, 'path');
-            $path.setAttributeNS(
-                null, 
-                "d", 
-                fs[bezier.length](bezier)
-            );
-            $path.setAttributeNS(null, "class", type);
-
-            svg.appendChild($path);
+            if(headless == false){
+                let $path = document.createElementNS(NS, 'path');
+                $path.setAttributeNS(null, "d", 
+                    fs[bezier.length](bezier)
+                );
+                $path.setAttributeNS(null, "class", type);
+                svg.appendChild($path);
+            }
             beziers.push(bezier);
         });
      }
      console.log(beziers.length)
-     toGraph(beziers);
+     return toGraph(beziers);
 }
 
 /**
  * Converts to a node-link graph for NetworkX
+ *
+ * @param beziers: List of lists representing bezier control points
+ * @author Bob YX Lee
  */
 function toGraph(beziers : number[][]){
   let out : any = {"nodes": [], "links": []}
   let vertex_set = new Set();
   let edges : any = [];
   let count = 0;
+  
+  // Add start and end points of each bezier
+  // as the in between control points are irrelevant.
   for(let i = 0; i < beziers.length; i++){
     let curr_bez = beziers[i];
     let start = curr_bez[0];
@@ -104,9 +106,9 @@ function toGraph(beziers : number[][]){
   }
 
   let vertices : any = [... vertex_set];
-
-  // console.log(vertices);
-
+  
+  // Connect start and end points to form the 
+  // edge list.
   for(let i = 0; i < beziers.length; i++){
     let curr_bez = beziers[i];
     let start = curr_bez[0];
@@ -116,14 +118,14 @@ function toGraph(beziers : number[][]){
     edges.push({"id": "e" + String(i), "source": sid, "target": eid});
   }
 
-  //console.log(edges);
-
+  // Add all unique vertices.
   for(let i = 0; i < vertices.length; i++){
     let cv = vertices[i];
     let d : any = {"id": i, "x": cv[0], "y": cv[1]}
     out["nodes"].push(d);
   }
 
+  // TODO: find a way to reduce the no. vertices to minimal...?
   out["links"] = edges;
-  console.log(out);
+  return out;
 }

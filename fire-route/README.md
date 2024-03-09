@@ -3,9 +3,26 @@
 - For visualising outputs, a client built with Solid + Bootstrap 
 
 ## Procedure
-- Generate Scale Axis Transform (SAT) using MAT library (flo-mat by Floris Steenkamp)
-- Convert SAT curve to a network graph (simplifying curves as far as possible)
-- Return network graph as a JSON dictionary of nodes and edges (to be compatible with NetworkX)
+- [x] Generate Scale Axis Transform (SAT) using MAT library (flo-mat by Floris Steenkamp)
+- [x] Convert SAT curve to a network graph (simplifying curves as far as possible)
+- [x] Return network graph as a JSON dictionary of nodes and edges (to be compatible with NetworkX)
+- [ ] For hosereel: Using a python server, load all room SAT networks and connect the closest node to the closest doors
+- [ ] Return network graph containing nodes possessing data of the room they're belonging to and whether they are a door or not.
+
+## Development
+To visually test SAT algorithms follow the section named **Boilerplate for testing**.
+
+To run the api server:
+
+Install all dependencies.
+```bash
+pnpm i .
+```
+
+Run the server.
+```bash 
+pnpm api
+```
 
 # Boilerplate for testing
 ## Usage
