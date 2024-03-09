@@ -1,4 +1,11 @@
 node_modules
 */node_modules/**
-*/__pycache__/**
+
 __pycache__
+*/__pycache__/**
+
+venv
+*/venv/**
+
+.ipynb_checkpoints
+*/ipynb_checkpoints/**
