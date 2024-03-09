@@ -84,5 +84,46 @@ export function drawMats(
         });
      }
      console.log(beziers.length)
-     console.log(JSON.stringify({"beziers":beziers}));
+     toGraph(beziers);
+}
+
+/**
+ * Converts to a node-link graph for NetworkX
+ */
+function toGraph(beziers : number[][]){
+  let out : any = {"nodes": [], "links": []}
+  let vertex_set = new Set();
+  let edges : any = [];
+  let count = 0;
+  for(let i = 0; i < beziers.length; i++){
+    let curr_bez = beziers[i];
+    let start = curr_bez[0];
+    let end = curr_bez[curr_bez.length - 1];
+    vertex_set.add(start);
+    vertex_set.add(end);
+  }
+
+  let vertices : any = [... vertex_set];
+
+  // console.log(vertices);
+
+  for(let i = 0; i < beziers.length; i++){
+    let curr_bez = beziers[i];
+    let start = curr_bez[0];
+    let end = curr_bez[curr_bez.length - 1];
+    let sid = vertices.indexOf(start);
+    let eid = vertices.indexOf(end);
+    edges.push({"id": "e" + String(i), "source": sid, "target": eid});
+  }
+
+  //console.log(edges);
+
+  for(let i = 0; i < vertices.length; i++){
+    let cv = vertices[i];
+    let d : any = {"id": i, "x": cv[0], "y": cv[1]}
+    out["nodes"].push(d);
+  }
+
+  out["links"] = edges;
+  console.log(out);
 }
