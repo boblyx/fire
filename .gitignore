@@ -9,3 +9,8 @@ venv
 
 .ipynb_checkpoints
 */ipynb_checkpoints/**
+
+fire-rvt/fire-rvt/bin
+fire-rvt/fire-rvt/obj
+fire-rvt/packages
+*/.vs/**
