@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command fire-rvt</Text>
+    <Description>Some description for fire-rvt</Description>
+    <Assembly>fire-rvt/fire-rvt.dll</Assembly>
+    <FullClassName>fire_rvt.Command</FullClassName>
+    <ClientId>1a5026d7-6b4a-4322-95b4-42387484794a</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application fire-rvt</Name>
+    <Assembly>fire-rvt/fire-rvt.dll</Assembly>
+    <FullClassName>fire_rvt.App</FullClassName>
+    <ClientId>0211f102-6d6e-4633-84d8-09a886a787eb</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
