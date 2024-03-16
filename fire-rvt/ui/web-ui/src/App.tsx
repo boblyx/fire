@@ -1,16 +1,20 @@
-import React from 'react';
-import './App.css';
+import "./App.css";
 import { Route, Routes } from "react-router-dom";
+import Landing from "./pages/Landing";
+import ExtinguisherPlan from "./components/ExtinguisherPlan";
+import HosereelPlan from "./components/HosereelPlan";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-    <p>Hello</p>
+      <Routes>
+        <Route path="/" element={<Landing />}>
+          <Route path="extinguisher-plan" element={<ExtinguisherPlan />} />
+          <Route path="hosereel-plan" element={<HosereelPlan />} />
+        </Route>
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
