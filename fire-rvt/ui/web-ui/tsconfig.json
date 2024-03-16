@@ -20,5 +20,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src", "src/components/ExtinguisherPlan.tsx", "src/components/HosereelPlan.tsx", "src/components/Sidebar.tsx"]
 }
