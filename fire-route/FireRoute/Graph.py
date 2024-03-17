@@ -207,7 +207,11 @@ def reSimplifyPath(path, start, end, nodes, nedges, mesh):
     prev_count = None
     curr_count = len(path)
     shortcut = path
+    loops = 0
     while(curr_count != prev_count):
+        if loops > 100: break
+        loops += 1
+        print("Path Simplify Loop: %d" % loops)
         curr_count = len(shortcut)
         #FIXME: Find out why we need to do it twice...
         shortcut = simplifyPath(shortcut, start, end, nodes, nedges, mesh)
