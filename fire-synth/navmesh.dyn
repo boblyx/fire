@@ -1,0 +1,1225 @@
+{
+  "Uuid": "fd291d1b-3246-4aaa-bada-b155d8415ebf",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "NavMesh",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Surface": {
+        "Key": "Autodesk.DesignScript.Geometry.Surface",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "DSRevitNodesUI.ElementsOfCategory, DSRevitNodesUI",
+      "Id": "b0490f87e41b4b358c7dedb3b1417821",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "43e48bf2d10b469da5db9896d2836e54",
+          "Name": "Category",
+          "Description": "The Category",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d780ba2e89334ce5bb18e03ce9475c41",
+          "Name": "Elements",
+          "Description": "An element class.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get all elements of the specified category from the model."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 504,
+      "SelectedString": "OST_Rooms",
+      "Id": "655ebe7b969d46019431dfb18f044a41",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "26b987deb6fd42379f8848faa122a153",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "64ab0ecb50c44b7b88a09acc1a78601a",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "aa711b8107f745cebcbd222f9b9d10c0",
+          "Name": "room",
+          "Description": "Revit.Elements.Room",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f6c8d4772bfd4070be334e0c67fb560c",
+          "Name": "Curve[][]",
+          "Description": "Curve[][]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Room.FinishBoundary",
+      "Replication": "Auto",
+      "Description": "Finish boundary\n\nRoom.FinishBoundary: Curve[][]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "77f31f689500469bbc386ff7e8a78f0e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "b545372128d74ad2b4cb0ba58b6d44a8",
+          "Name": "a",
+          "Description": "a",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d0ca217e9ef24c79b7e9f8aa5bbdbe3e",
+          "Name": "",
+          "Description": "y",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "y = a[0][0];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1dfdf806e0e9446792f5c9deb5bf540f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "6df393c9274043208f3949ca1015e2c1",
+          "Name": "curves",
+          "Description": "Curves to join into polycurve\n\nCurve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d6a178237e074f3a9e8ddd45dbbb2d7a",
+          "Name": "joinTolerance",
+          "Description": "Tolerance to determine size of gap allowed between curves to be joined\n\ndouble\nDefault value : 0.001",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b69e686924b2475ba8dcbb40d6fb5736",
+          "Name": "trimCurves",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "191b8b3c0d8c4c5c98260893cd1de62e",
+          "Name": "trimLength",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fc61899c69984d88bb805c0e8b2039f9",
+          "Name": "PolyCurve",
+          "Description": "Polycurve created by joined curves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves@Autodesk.DesignScript.Geometry.Curve[],double,bool,double",
+      "Replication": "Auto",
+      "Description": "Make PolyCurve by joining curves. Flips curve as needed for connectivity. Choose a preferred join tolerance between 1e-6 and 1e-3 units.\n\nPolyCurve.ByJoinedCurves (curves: Curve[], joinTolerance: double = 0.001, trimCurves: bool = false, trimLength: double = 0): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b49df58728da4fe383fb34357967b690",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a95db0cd91c3437c860453815a98abec",
+          "Name": "surface",
+          "Description": "Autodesk.DesignScript.Geometry.Surface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "243c7f260d8c44bebbe2ea3e29518520",
+          "Name": "others",
+          "Description": "Other surfaces to subtract\n\nSurface[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5582a8cd0df5425a8e7b2540573f6926",
+          "Name": "Surface",
+          "Description": "Resulting boolean surface or polySurface",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.Difference@Autodesk.DesignScript.Geometry.Surface[]",
+      "Replication": "Auto",
+      "Description": "The boolean difference of this Surface and the union of input Surfaces. This method might return a polySurface if the resulting boolean is non-manifold or multi-faced.\n\nSurface.Difference (others: Surface[]): Surface"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# The inputs to this node will be stored as a list in the IN variables.\r\nbounds = IN[0]\r\n\r\nobs = []\r\n\r\nfor i, b in enumerate(bounds[0]):\r\n    if i == 0: continue\r\n    obs.append(b)\r\n    pass\r\n\r\n# Place your code below this line\r\n\r\n# Assign your output to the OUT variable.\r\nOUT = obs",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "92efdcd6f6a84d97ab2ed458b3dea8a2",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "2dcaee63425f4af5b210b8fd62eccfc5",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e97d16a7efd248d3923980dea24af42c",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7b060ef5462f47948637e0de503d288c",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "15d2b6d146104d48ad9b3149acab6918",
+          "Name": "closedCurve",
+          "Description": "Closed curve used as surface boundary\n\nCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "57af133de9ca4472922b95f95068e1d9",
+          "Name": "Surface",
+          "Description": "Surface created by patch",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve",
+      "Replication": "Auto",
+      "Description": "Create a Surface by filling in the interior of a closed boundary defined by input Curves.\n\nSurface.ByPatch (closedCurve: Curve): Surface"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5e1fd822534845b2af04a4ba7f91286e",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "e1470b65bae74dae9affcc0aaf6bb113",
+          "Name": "curves",
+          "Description": "Curves to join into polycurve\n\nCurve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "656d03d6fbbb4239893a75738315f277",
+          "Name": "joinTolerance",
+          "Description": "Tolerance to determine size of gap allowed between curves to be joined\n\ndouble\nDefault value : 0.001",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "74c0021acd594fdc9ea667adefe724aa",
+          "Name": "trimCurves",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0f55c11eb27345949122a226bb1f59dc",
+          "Name": "trimLength",
+          "Description": "double\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "91461bbd064a432697a5e4ba1c8f97b7",
+          "Name": "PolyCurve",
+          "Description": "Polycurve created by joined curves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves@Autodesk.DesignScript.Geometry.Curve[],double,bool,double",
+      "Replication": "Auto",
+      "Description": "Make PolyCurve by joining curves. Flips curve as needed for connectivity. Choose a preferred join tolerance between 1e-6 and 1e-3 units.\n\nPolyCurve.ByJoinedCurves (curves: Curve[], joinTolerance: double = 0.001, trimCurves: bool = false, trimLength: double = 0): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "20e0cfa48fa34d989906d2edbec2f9fc",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "8589227748e746af8fe323060fc988a3",
+          "Name": "inputGeometry",
+          "Description": "Geometry",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "655fe8d342a04d45affc3b5a58300b3a",
+          "Name": "tolerance",
+          "Description": "double\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2f11403d876f4c5ea8f8b863d676292b",
+          "Name": "maxGridLines",
+          "Description": "int\nDefault value : 512",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "524d048311a04e23ba0cca043327f327",
+          "Name": "Mesh",
+          "Description": "Mesh",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.Dynamo.MeshToolkit.Mesh.ByGeometry@Autodesk.DesignScript.Geometry.Geometry,double,int",
+      "Replication": "Auto",
+      "Description": "Convert a Geometry object such as a Solid or Surface into a Mesh. The resolution of the mesh is determined by the Dynamo render precision\n\nMesh.ByGeometry (inputGeometry: Geometry, tolerance: double = -1, maxGridLines: int = 512): Mesh"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "27c19331728d4e9e9ae12ee211fb4da4",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "5a5ef3d671a645518724b56189d08be4",
+          "Name": "filename",
+          "Description": "string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9b9a4ea16ed849ebbea6cb97a4609166",
+          "Name": "meshes",
+          "Description": "Mesh[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bd147cada9a344d0a88ed11e5ba499d2",
+          "Name": "string",
+          "Description": "string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.Dynamo.MeshToolkit.Mesh.ExportMeshes@string,Autodesk.Dynamo.MeshToolkit.Mesh[]",
+      "Replication": "Auto",
+      "Description": "Exports meshes to a format determined by file name: .mix -- Meshmixer .obj -- Wavefront .stl -- STL format .dae -- COLLADA .ply -- Polygon File Format This function returns the filename of the output file, which may need to be changed if it contains non-ascii characters\n\nMesh.ExportMeshes (filename: string, meshes: Mesh[]): string"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nimport time\r\nfrom uuid import uuid4\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# The inputs to this node will be stored as a list in the IN variables.\r\ndataEnteringNode = IN\r\n\r\n# Place your code below this line\r\ndirectory = \"C:/temp/\"\r\n# Assign your output to the OUT variable.\r\nOUT = directory + str(int(time.time())) + \"_\" + str(uuid4()) + \".obj\"",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "0a5109955fca452eaef895a50d768888",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "251b2238287f42019bbf3ef58a1e8bbc",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9e7e94feccdb44e186618c0e5cfdc135",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "GenerativeDesign.Gate, GenerativeDesign.Dynamo.Nodes",
+      "InputValue": false,
+      "Id": "791f9e92b8964e9ba3522bbf30ac970a",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "9f189b63d7c245e095c4e6181420f84a",
+          "Name": ">",
+          "Description": "Data to pass to a downstream node with gated controls.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e455febb79cd414abdea30a8d27ad43a",
+          "Name": ">",
+          "Description": "Data",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Block data passing through this node to downstream nodes. Node returns the input data only if the node value is set to Open.  \r\n\r\nIn Generative Design workflows, this node should be used to control and block the behavior of nodes that will place elements in Revit"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "1847e3441c5e4d00a4e5b38698320bde",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6eb7d652df734997a2346a3eff6b032a",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "1;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "48939f4f497a4d13be9bb44c523e7b70",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "8d8cf28a662e44b2a290083cc367226d",
+          "Name": "mesh",
+          "Description": "Autodesk.Dynamo.MeshToolkit.Mesh",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f3bbb51304524e2daeb58abf251918ae",
+          "Name": "indices",
+          "Description": "List of vertex indices for each mesh triangle.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.Dynamo.MeshToolkit.Mesh.VertexIndicesByTri",
+      "Replication": "Auto",
+      "Description": "Returns the vertex indices for each mesh triangle. (as opposed to unique vertex indices)\n\nMesh.VertexIndicesByTri ( ): int[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "2277c22cbc3d45849c6b8ac0d88431eb",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "f72db5aec82e475e83c1e4bff9046197",
+          "Name": "mesh",
+          "Description": "Autodesk.Dynamo.MeshToolkit.Mesh",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8d424cbee80c4c65b96424e2af9d98ac",
+          "Name": "Point[]",
+          "Description": "Point[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.Dynamo.MeshToolkit.Mesh.Vertices",
+      "Replication": "Auto",
+      "Description": "Converts the Mesh vertices to Points, and returns them\n\nMesh.Vertices ( ): Point[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nimport os\r\nimport time\r\nimport json\r\nfrom uuid import uuid4\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n# The inputs to this node will be stored as a list in the IN variables.\r\nvertices = IN[0]\r\nfaces = IN[1]\r\nwrite = IN[2]\r\no_faces = []\r\no_verts = []\r\ni = 0\r\nwhile(i < len(faces)-2):\r\n    o_faces.append([faces[i],  faces[i+1], faces[i+2]])\r\n    i += 3\r\n    pass \r\n\r\nfor v in vertices:\r\n    o_verts.append([v.X, v.Y])\r\n    pass\r\n\r\npayload = {\"faces\":o_faces, \"vertices\":  o_verts}\r\n\r\nfolderpath = \"C:/temp/fire-synth\"\r\nos.makedirs(folderpath, exist_ok = True)\r\nfilename = str(int(time.time())) + \"_\" + str(uuid4()) + \".json\"\r\nfilepath = os.path.join(folderpath, filename)\r\n\r\nif write:\r\n    with open(filepath, 'w') as f:\r\n        f.write(json.dumps(payload))\r\nOUT = payload\r\n\r\n# Assign your output to the OUT variable.\r\n#OUT = o_faces",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "2f9c59f9957f4206955a079cfcb6e9dc",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "6def50cd97b74d549e3e596921f6aac7",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3d3e7dd043b04385b68185f3a84df12f",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96d55c7d2a554e739c65db02d92464fa",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "311f8a746a304b8093fbdd7f84d96bc4",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "2290742d97f1421ca09cfd4e2ddb3ae6",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f08319ae95184cf891eb27337787d0ac",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Enables selection between True and False",
+      "InputValue": false
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# Load the Python Standard and DesignScript Libraries\r\nimport sys\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nfrom uuid import uuid4\r\nimport os\r\nimport time\r\nimport json\r\n# The inputs to this node will be stored as a list in the IN variables.\r\nbounds = IN[0][0]\r\nwrite = IN[1]\r\npayload = {\r\n\"room\": [],\r\n\"obstacles\": []\r\n}\r\n\r\nfor i, b in enumerate(bounds):\r\n    if i == 0:\r\n        for p in b:\r\n            payload[\"room\"].append([p.StartPoint.X, p.StartPoint.Y, p.StartPoint.Z])\r\n        continue\r\n    obs = []\r\n    for p in b:\r\n        obs.append([p.StartPoint.X, p.StartPoint.Y, p.StartPoint.Z])\r\n    payload[\"obstacles\"].append(obs)\r\n       \r\n       \r\n    pass\r\n\r\nfolderpath = \"C:/temp/fire-synth\"\r\nos.makedirs(folderpath, exist_ok = True)\r\nfilename = str(int(time.time())) + \"_\" + str(uuid4()) + \".json\"\r\nfilepath = os.path.join(folderpath, filename)\r\n\r\nif write:\r\n    with open(filepath, 'w') as f:\r\n        f.write(json.dumps(payload))\r\nOUT = payload\r\n\r\n\r\n\r\n\r\n# Place your code below this line\r\n# Assign your output to the OUT variable.",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "966c76e4b0b04395b8b5fdb34255c6bc",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "74b7b95c493a420fb62bf6614004a7c9",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "093c3937e69d48a89b435e660d90b0e1",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ac63d37e94fe470e866c957960e9353d",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "Id": "cbd5be6937854381b11d5bb2598ae41b",
+      "NodeType": "BooleanInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0088dc996d7e4a98bc3d81986ea5d2ec",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Enables selection between True and False",
+      "InputValue": false
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "645f585521434d62bd8033877e5ef9f0",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "fcf89ac5d28247668e986a4d80775641",
+          "Name": "curve",
+          "Description": "Autodesk.DesignScript.Geometry.Curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5d930bd576bd462ca8fda916c50bfc6f",
+          "Name": "Surface",
+          "Description": "A Surface on the interior of the curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Curve.Patch",
+      "Replication": "Auto",
+      "Description": "Patch a closed Curve\n\nCurve.Patch ( ): Surface"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "d780ba2e89334ce5bb18e03ce9475c41",
+      "End": "aa711b8107f745cebcbd222f9b9d10c0",
+      "Id": "e58946bab1174918a483bfd24975ee26",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "26b987deb6fd42379f8848faa122a153",
+      "End": "43e48bf2d10b469da5db9896d2836e54",
+      "Id": "406942c4397d4c2c8598be68dc92cc89",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f6c8d4772bfd4070be334e0c67fb560c",
+      "End": "b545372128d74ad2b4cb0ba58b6d44a8",
+      "Id": "92492e0bc3284f72b93df9ec030b9bc8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f6c8d4772bfd4070be334e0c67fb560c",
+      "End": "2dcaee63425f4af5b210b8fd62eccfc5",
+      "Id": "6c6b5f850f7e453891bb930b0c41c683",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f6c8d4772bfd4070be334e0c67fb560c",
+      "End": "74b7b95c493a420fb62bf6614004a7c9",
+      "Id": "24f63b8e726d4cffb70e45a8fb00cd17",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d0ca217e9ef24c79b7e9f8aa5bbdbe3e",
+      "End": "6df393c9274043208f3949ca1015e2c1",
+      "Id": "10da6768e7be4128883f7b4562ec371f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "fc61899c69984d88bb805c0e8b2039f9",
+      "End": "fcf89ac5d28247668e986a4d80775641",
+      "Id": "f2983a845bb14006a775f4d7a3074c55",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5582a8cd0df5425a8e7b2540573f6926",
+      "End": "8589227748e746af8fe323060fc988a3",
+      "Id": "433d577cad5941b598af55d7d224b9f7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e97d16a7efd248d3923980dea24af42c",
+      "End": "e1470b65bae74dae9affcc0aaf6bb113",
+      "Id": "0218e31f650a4954bad2bcbf753c7ea4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "57af133de9ca4472922b95f95068e1d9",
+      "End": "243c7f260d8c44bebbe2ea3e29518520",
+      "Id": "8d6b8961ea7b40979ab44ca908e32c9b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "91461bbd064a432697a5e4ba1c8f97b7",
+      "End": "15d2b6d146104d48ad9b3149acab6918",
+      "Id": "d8de88b0379043eb8688817b6db72f60",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "524d048311a04e23ba0cca043327f327",
+      "End": "9b9a4ea16ed849ebbea6cb97a4609166",
+      "Id": "474c1f13d3534a639cbe1ce239508e1a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "524d048311a04e23ba0cca043327f327",
+      "End": "8d8cf28a662e44b2a290083cc367226d",
+      "Id": "251aedcf1e6e402797425eedb2699fa0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "524d048311a04e23ba0cca043327f327",
+      "End": "f72db5aec82e475e83c1e4bff9046197",
+      "Id": "e636f76d282242adb30d2efb4f6164af",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9e7e94feccdb44e186618c0e5cfdc135",
+      "End": "9f189b63d7c245e095c4e6181420f84a",
+      "Id": "7a030157adf94a69986c39ae65250ac9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e455febb79cd414abdea30a8d27ad43a",
+      "End": "5a5ef3d671a645518724b56189d08be4",
+      "Id": "c49055b93b6c46deb956f6b02b903043",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6eb7d652df734997a2346a3eff6b032a",
+      "End": "655fe8d342a04d45affc3b5a58300b3a",
+      "Id": "a5fc52ee696b406b8e1b39e440432354",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f3bbb51304524e2daeb58abf251918ae",
+      "End": "3d3e7dd043b04385b68185f3a84df12f",
+      "Id": "660a1d362e1b4c589618615432027cc4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8d424cbee80c4c65b96424e2af9d98ac",
+      "End": "6def50cd97b74d549e3e596921f6aac7",
+      "Id": "4f08515fc4024f829de6c51aa52c67db",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f08319ae95184cf891eb27337787d0ac",
+      "End": "96d55c7d2a554e739c65db02d92464fa",
+      "Id": "5c3a3dda781d434a9e87adaa08ddf7f2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0088dc996d7e4a98bc3d81986ea5d2ec",
+      "End": "093c3937e69d48a89b435e660d90b0e1",
+      "Id": "358e140264fc404f983a11ce555b69bf",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5d930bd576bd462ca8fda916c50bfc6f",
+      "End": "a95db0cd91c3437c860453815a98abec",
+      "Id": "832034dbf29c4a79a07f2f08d003ed0f",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "MeshToolkit",
+      "Version": "4.0.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "20e0cfa48fa34d989906d2edbec2f9fc",
+        "27c19331728d4e9e9ae12ee211fb4da4",
+        "48939f4f497a4d13be9bb44c523e7b70",
+        "2277c22cbc3d45849c6b8ac0d88431eb"
+      ]
+    },
+    {
+      "Name": "GenerativeDesign",
+      "Version": "6.1.1.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "791f9e92b8964e9ba3522bbf30ac970a"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -15999.6748046875,
+      "EyeY": 39295.39453125,
+      "EyeZ": 22945.140625,
+      "LookX": 11271.876953125,
+      "LookY": -37695.56640625,
+      "LookZ": -19770.240234375,
+      "UpX": 0.35927620530128479,
+      "UpY": 0.68835461139678955,
+      "UpZ": -0.63014966249465942
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "b0490f87e41b4b358c7dedb3b1417821",
+        "Name": "All Elements of Category",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 224.0,
+        "Y": 448.0
+      },
+      {
+        "Id": "655ebe7b969d46019431dfb18f044a41",
+        "Name": "Categories",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -75.382724535061129,
+        "Y": 449.13993410111811
+      },
+      {
+        "Id": "64ab0ecb50c44b7b88a09acc1a78601a",
+        "Name": "Room.FinishBoundary",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 705.35030822105966,
+        "Y": 546.12490217330162
+      },
+      {
+        "Id": "77f31f689500469bbc386ff7e8a78f0e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 600.94361535713233,
+        "Y": 35.291482280914806
+      },
+      {
+        "Id": "1dfdf806e0e9446792f5c9deb5bf540f",
+        "Name": "PolyCurve.ByJoinedCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1123.4150237394624,
+        "Y": -232.76718562087439
+      },
+      {
+        "Id": "b49df58728da4fe383fb34357967b690",
+        "Name": "Surface.Difference",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2263.3634186267459,
+        "Y": 53.41935948560797
+      },
+      {
+        "Id": "92efdcd6f6a84d97ab2ed458b3dea8a2",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1061.0869205116467,
+        "Y": 339.54356720634865
+      },
+      {
+        "Id": "7b060ef5462f47948637e0de503d288c",
+        "Name": "Surface.ByPatch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 1800.0239286631643,
+        "Y": 314.63873765816857
+      },
+      {
+        "Id": "5e1fd822534845b2af04a4ba7f91286e",
+        "Name": "PolyCurve.ByJoinedCurves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1400.4595928884828,
+        "Y": 104.75085699831635
+      },
+      {
+        "Id": "20e0cfa48fa34d989906d2edbec2f9fc",
+        "Name": "Mesh.ByGeometry",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2698.3491550927583,
+        "Y": 52.317454560482815
+      },
+      {
+        "Id": "27c19331728d4e9e9ae12ee211fb4da4",
+        "Name": "Mesh.ExportMeshes",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3444.9775105793133,
+        "Y": -179.15651237038975
+      },
+      {
+        "Id": "0a5109955fca452eaef895a50d768888",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2717.3227470794304,
+        "Y": -223.78039390157028
+      },
+      {
+        "Id": "791f9e92b8964e9ba3522bbf30ac970a",
+        "Name": "Data.Gate",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3005.7080123533169,
+        "Y": -254.89012881115406
+      },
+      {
+        "Id": "1847e3441c5e4d00a4e5b38698320bde",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2439.0,
+        "Y": 347.0
+      },
+      {
+        "Id": "48939f4f497a4d13be9bb44c523e7b70",
+        "Name": "Mesh.VertexIndicesByTri",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2962.3697727907934,
+        "Y": 632.93270771743323
+      },
+      {
+        "Id": "2277c22cbc3d45849c6b8ac0d88431eb",
+        "Name": "Mesh.Vertices",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3136.1011019918051,
+        "Y": 147.2734647797856
+      },
+      {
+        "Id": "2f9c59f9957f4206955a079cfcb6e9dc",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3682.3814362108242,
+        "Y": 206.91052957469884
+      },
+      {
+        "Id": "2290742d97f1421ca09cfd4e2ddb3ae6",
+        "Name": "Boolean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3341.8241378938164,
+        "Y": 964.284816238467
+      },
+      {
+        "Id": "966c76e4b0b04395b8b5fdb34255c6bc",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": true,
+        "X": 1212.9158650599788,
+        "Y": 680.43857123675537
+      },
+      {
+        "Id": "cbd5be6937854381b11d5bb2598ae41b",
+        "Name": "Boolean",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": true,
+        "X": 1094.909384975319,
+        "Y": 868.85508537888438
+      },
+      {
+        "Id": "645f585521434d62bd8033877e5ef9f0",
+        "Name": "Curve.Patch",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 1645.8235927190783,
+        "Y": -167.94802082195957
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "8c0b9cca786f4a3dbc8ceb952665dd32",
+        "Title": "Set to True to export data to C:/temp/fire-synth",
+        "DescriptionText": "Do it!",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "2290742d97f1421ca09cfd4e2ddb3ae6"
+        ],
+        "HasNestedGroups": false,
+        "Left": 3331.8241378938164,
+        "Top": 804.284816238467,
+        "Width": 312.71333333333337,
+        "Height": 292.00000000000011,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 964.284816238467,
+        "InitialHeight": 162.0,
+        "TextblockHeight": 150.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "0ed9eeea63bf4d06bb1ef979745caff2",
+        "Title": "Set to Open to export as obj to C:/temp/fire-synth",
+        "DescriptionText": "Description <Double click here to edit group description>",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "791f9e92b8964e9ba3522bbf30ac970a"
+        ],
+        "HasNestedGroups": false,
+        "Left": 2995.7080123533169,
+        "Top": -423.89012881115406,
+        "Width": 312.71333333333337,
+        "Height": 301.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -254.89012881115406,
+        "InitialHeight": 162.0,
+        "TextblockHeight": 159.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "b06ff9e1d42d47cea5e9da6a3ae83c52",
+        "Title": "fire dataset exporter\n\nAuthor: Bob Lee\nDependencies:\n•  MeshToolkit",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [],
+        "HasNestedGroups": false,
+        "Left": 68.38727921590862,
+        "Top": -3.8205490953004642,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -1576.8284634532138,
+    "Y": -40.472430184962377,
+    "Zoom": 0.61761034830656125
+  }
+}

@@ -48,10 +48,10 @@
             <chunk name="Projection">
               <items count="2">
                 <item name="Target" type_name="gh_drawing_point" type_code="30">
-                  <X>-118</X>
-                  <Y>122</Y>
+                  <X>-48</X>
+                  <Y>127</Y>
                 </item>
-                <item name="Zoom" type_name="gh_single" type_code="5">0.85</item>
+                <item name="Zoom" type_name="gh_single" type_code="5">0.7225001</item>
               </items>
             </chunk>
             <chunk name="Views">
@@ -697,8 +697,8 @@ a = n1
 b = [nodes[i] for i in path]</item>
                     <item name="Description" type_name="gh_string" type_code="10">Provides a scripting component.</item>
                     <item name="EditorLocation" type_name="gh_drawing_point" type_code="30">
-                      <X>2192</X>
-                      <Y>312</Y>
+                      <X>2181</X>
+                      <Y>165</Y>
                     </item>
                     <item name="EditorSize" type_name="gh_drawing_size" type_code="32">
                       <W>1178</W>
@@ -3891,7 +3891,7 @@ b = str(json_mesh)
                     <item name="NickName" type_name="gh_string" type_code="10">Panel</item>
                     <item name="Optional" type_name="gh_bool" type_code="1">false</item>
                     <item name="ScrollRatio" type_name="gh_double" type_code="6">0</item>
-                    <item name="Source" index="0" type_name="gh_guid" type_code="9">d4e87ebe-4427-4c65-a2c4-1f802957e4a9</item>
+                    <item name="Source" index="0" type_name="gh_guid" type_code="9">c0c12fac-c48b-44d3-81e7-3fcc1f5a85dc</item>
                     <item name="SourceCount" type_name="gh_int32" type_code="3">1</item>
                     <item name="UserText" type_name="gh_string" type_code="10">Double click to edit panel content…</item>
                   </items>
