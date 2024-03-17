@@ -12,8 +12,8 @@ class Line2D:
         """
         Initialises a 2D line storing 2 points as np.array objects.
         """
-        self.p1 = np.array(p1)
-        self.p2 = np.array(p2)
+        self.p1 = np.array([p1[0], p1[1]])
+        self.p2 = np.array([p2[0], p2[1]])
         pass
     
     @property

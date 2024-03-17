@@ -14,3 +14,7 @@ fire-rvt/fire-rvt/bin
 fire-rvt/fire-rvt/obj
 fire-rvt/packages
 */.vs/**
+
+
+dataset
+*/dataset/**
