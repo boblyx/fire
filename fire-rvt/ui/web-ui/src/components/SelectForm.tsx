@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
-import { Separator } from "../components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -17,7 +16,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -32,6 +30,7 @@ interface FloorProps {
 interface RoomProps {
   id: string;
   room_name: string;
+  room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][] | null;
 }
@@ -53,6 +52,7 @@ const roomList: RoomProps[] = [
   {
     id: "b98e01f0-35d5-460c-975f-6a63406d8f52",
     room_name: "2F - Office",
+    room_area: 70,
     room_vertices: [
       [0, 0],
       [8000, 0],
@@ -73,6 +73,7 @@ const roomList: RoomProps[] = [
   {
     id: "67a1ba45-3e13-4ba1-99f6-f931f50dabfc",
     room_name: "2F - Pantry",
+    room_area: 70,
     room_vertices: [
       [0, 0],
       [8000, 0],
@@ -93,6 +94,7 @@ const roomList: RoomProps[] = [
   {
     id: "b1955505-0c05-40d4-abe7-fb27c6e1067f",
     room_name: "2F - Corridor",
+    room_area: 70,
     room_vertices: [
       [0, 0],
       [8000, 0],
@@ -130,9 +132,10 @@ const SelectForm = () => {
 
   const isLoading = formState.isSubmitting;
 
+  // Reads user input for floor name field.
   const floorNameValue = watch("floor_name");
 
-  // TODO: Function to do get request to Revit API to retrieve all relevant floor data. Change the API URL accordingly.
+  // TODO: Stub function to do get request to Revit API to retrieve all relevant floor data. Change the API URL accordingly.
   const getFloors = async (): Promise<FloorProps[]> => {
     const response = await axios.get("https://your-api-endpoint.com/floors");
     return response.data;
@@ -146,8 +149,37 @@ const SelectForm = () => {
     setAllFloors(floorList);
   }, []);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // TODO: Stub function to do get request to Revit API to retrieve all relevant room data based on floor name input. Change the API URL accordingly.
+  // May not require getRoomBoundary stub function as would require another API request to Revit?
+  const getRooms = async (floor_id: string): Promise<RoomProps[]> => {
+    const response = await axios.get("https://your-api-endpoint.com/rooms");
+    return response.data;
+  };
+
+  // TODO: To amend this useEffect method once api endpoint is confirmed. useEffect runs every time floor name changes.
+  useEffect(() => {
+    /*
+    getRooms(floorNameValue).then(setAllRooms).catch(error => console.error('Failed to fetch rooms:', error))
+    */
+    setAllRooms(roomList);
+  }, [floorNameValue]);
+
+  // Handle form submit for check
+  // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
+  const checkExtinguisherPlacement = async (
+    values: z.infer<typeof formSchema>,
+  ) => {
     try {
+      // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
+      const chosenRoom = allRooms.filter(
+        (room) => room.room_name === values.room_name,
+      )[0];
+      console.log({
+        ...values,
+        room_area: chosenRoom.room_area,
+        room_vertices: chosenRoom.room_vertices,
+        extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -157,10 +189,45 @@ const SelectForm = () => {
     }
   };
 
+  // Handle form submit for inference
+  // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
+  const inferExtinguisherPlacement = async (
+    values: z.infer<typeof formSchema>,
+  ) => {
+    try {
+      // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
+      const chosenRoom = allRooms.filter(
+        (room) => room.room_name === values.room_name,
+      )[0];
+      console.log({
+        ...values,
+        room_area: chosenRoom.room_area,
+        room_vertices: chosenRoom.room_vertices,
+        extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "Failure to submit room data. Please try again.",
+      });
+    }
+  };
+
+  // Reset form fields upon successful submission
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset({ floor_name: "", room_name: "" });
+    }
+  }, [formState, reset]);
+
   return (
     <div className="border border-primary/10 rounded-md bg-gray-200 drop-shadow-md h-full p-3">
       <Form {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={handleSubmit(checkExtinguisherPlacement)}
+          className="space-y-4"
+        >
           <FormField
             name="floor_name"
             control={control}
@@ -229,7 +296,12 @@ const SelectForm = () => {
           />
           <div className="w-full flex justify-start space-x-4 pt-10">
             <Button disabled={isLoading}>Check</Button>
-            <Button disabled={isLoading}>Suggest</Button>
+            <Button
+              disabled={isLoading}
+              onClick={handleSubmit(inferExtinguisherPlacement)}
+            >
+              Suggest
+            </Button>
           </div>
         </form>
       </Form>

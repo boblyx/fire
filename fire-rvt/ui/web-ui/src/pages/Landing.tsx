@@ -7,8 +7,34 @@ import ResultPanel from "../components/ResultPanel";
 import { Separator } from "../components/ui/separator";
 import { Button } from "../components/ui/button";
 
+// TODO: Props to be changed based on result output of AI model
+interface CheckResultProps {
+  id: string;
+  room_name: string;
+  room_area: string;
+  room_vertices: [number, number][];
+  extinguisher_vertices: [number, number][];
+  path_vertices: [number, number][];
+  rating: number; 
+  result: string; 
+}
+
+// TODO: Props to be changed based on result output of AI model
+interface InferResultProps {
+  id: string;
+  room_name: string;
+  room_area: string;
+  room_vertices: [number, number][];
+  extinguisher_vertices: [number, number][];
+  path_vertices: [number, number][];
+  rating: number;
+  result: string;
+}
+
 const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const [checkResults, setCheckResults] = useState(); 
 
   const navigate = useNavigate(); 
 
