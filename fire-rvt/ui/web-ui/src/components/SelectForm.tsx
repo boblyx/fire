@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,36 @@ interface RoomProps {
   room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][] | null;
+}
+
+// TODO: Props to be changed based on result output of AI model
+interface CheckResultProps {
+  id: string;
+  room_name: string;
+  room_area: string;
+  room_vertices: [number, number][];
+  extinguisher_vertices: [number, number][];
+  path_vertices: [number, number][];
+  rating: number; 
+  result: string; 
+}
+
+// TODO: Props to be changed based on result output of AI model
+interface InferResultProps {
+  id: string;
+  room_name: string;
+  room_area: string;
+  room_vertices: [number, number][];
+  extinguisher_vertices: [number, number][];
+  path_vertices: [number, number][];
+  rating: number;
+  result: string;
+}
+
+// TODO: Props to be changed based on result output of AI model
+interface ResultProps {
+  setCheckResults: Dispatch<SetStateAction<CheckResultProps[]>>;
+  setInferResults: Dispatch<SetStateAction<InferResultProps[]>>;
 }
 
 const formSchema = z.object({
@@ -114,7 +144,7 @@ const roomList: RoomProps[] = [
   },
 ];
 
-const SelectForm = () => {
+const SelectForm: React.FC<ResultProps> = ({setCheckResults, setInferResults}) => {
   const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
   const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
 

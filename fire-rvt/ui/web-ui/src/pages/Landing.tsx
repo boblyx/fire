@@ -34,7 +34,8 @@ interface InferResultProps {
 const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [checkResults, setCheckResults] = useState(); 
+  const [checkResults, setCheckResults] = useState<CheckResultProps[]>([]); 
+  const [inferResults, setInferResults] = useState<InferResultProps[]>([]);
 
   const navigate = useNavigate(); 
 
@@ -49,11 +50,17 @@ const Landing = () => {
         <div className="flex flex-col space-y-4">
           <div className="font-bold text-2xl text-start">Select</div>
           <div className="flex-1">
-            <SelectForm />
+            <SelectForm
+              setCheckResults={setCheckResults}
+              setInferResults={setInferResults}
+            />
           </div>
           <div className="font-bold text-2xl text-start">Results</div>
           <div className="flex-1">
-            <ResultPanel />
+            <ResultPanel
+              checkResults={checkResults}
+              inferResults={inferResults}
+            />
           </div>
         </div>
         <div className="col-span-4 space-y-4">
