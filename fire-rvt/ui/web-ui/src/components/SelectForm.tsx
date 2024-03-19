@@ -160,10 +160,6 @@ const SelectForm: React.FC<ResultProps> = ({
 
   const context = useContext(ResultContext);
 
-  if (!context) {
-    console.error("MyComponent must be used within a ResultContext.Provider");
-  }
-
   const {
     checkResultData,
     setCheckResultData,
