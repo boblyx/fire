@@ -6,7 +6,8 @@ UI for web application lauched from created Revit plugin.
 
 In the project directory, run the following scripts:
 
-`npm i`
+### `npm i`
+
 Once you have forked the repo, run "npm i" in the terminal to download all the relevant dependencies.
 
 ## Starting the application 
