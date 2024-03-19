@@ -1,8 +1,15 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import {
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useContext,
+} from "react";
 import axios from "axios";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ResultContext } from "../contexts/ResultContext";
 
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
@@ -39,19 +46,19 @@ interface RoomProps {
 interface CheckResultProps {
   id: string;
   room_name: string;
-  room_area: string;
+  room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
-  rating: number; 
-  result: string; 
+  rating: number;
+  result: string;
 }
 
 // TODO: Props to be changed based on result output of AI model
 interface InferResultProps {
   id: string;
   room_name: string;
-  room_area: string;
+  room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
@@ -144,9 +151,25 @@ const roomList: RoomProps[] = [
   },
 ];
 
-const SelectForm: React.FC<ResultProps> = ({setCheckResults, setInferResults}) => {
+const SelectForm: React.FC<ResultProps> = ({
+  setCheckResults,
+  setInferResults,
+}) => {
   const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
   const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
+
+  const context = useContext(ResultContext);
+
+  if (!context) {
+    console.error("MyComponent must be used within a ResultContext.Provider");
+  }
+
+  const {
+    checkResultData,
+    setCheckResultData,
+    inferResultData,
+    setInferResultData,
+  } = context;
 
   const { toast } = useToast();
 
@@ -204,11 +227,33 @@ const SelectForm: React.FC<ResultProps> = ({setCheckResults, setInferResults}) =
       const chosenRoom = allRooms.filter(
         (room) => room.room_name === values.room_name,
       )[0];
+      // TODO: To remove
       console.log({
         ...values,
         room_area: chosenRoom.room_area,
         room_vertices: chosenRoom.room_vertices,
         extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      });
+      // TODO: To confirm
+      const payload = {
+        ...values,
+        room_area: chosenRoom.room_area,
+        room_vertices: chosenRoom.room_vertices,
+        extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      };
+      // TODO: To replace with actual API endpoint
+      const response = await axios.post(
+        "https://your-api-endpoint.com/checkExtinguisher",
+        payload,
+      );
+      // Pass the states upwards and through context
+      setCheckResults(response.data);
+      // Context passed to Extinguisher and Hosereel Plans
+      setCheckResultData(response.data);
+      toast({
+        variant: "success",
+        title: "Success!",
+        description: "Room data exported successfully.",
       });
     } catch (error) {
       toast({
@@ -229,11 +274,33 @@ const SelectForm: React.FC<ResultProps> = ({setCheckResults, setInferResults}) =
       const chosenRoom = allRooms.filter(
         (room) => room.room_name === values.room_name,
       )[0];
+      // TODO: To remove
       console.log({
         ...values,
         room_area: chosenRoom.room_area,
         room_vertices: chosenRoom.room_vertices,
         extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      });
+      // TODO: To confirm
+      const payload = {
+        ...values,
+        room_area: chosenRoom.room_area,
+        room_vertices: chosenRoom.room_vertices,
+        extinguisher_vertices: chosenRoom.extinguisher_vertices,
+      };
+      // TODO: To replace with actual API endpoint
+      const response = await axios.post(
+        "https://your-api-endpoint.com/checkExtinguisher",
+        payload,
+      );
+      // Pass the states upwards and through context
+      setInferResults(response.data);
+      // Context passed to Extinguisher and Hosereel Plans
+      setInferResultData(response.data);
+      toast({
+        variant: "success",
+        title: "Success!",
+        description: "Room data exported successfully.",
       });
     } catch (error) {
       toast({

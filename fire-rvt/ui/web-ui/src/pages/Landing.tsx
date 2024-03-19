@@ -1,5 +1,10 @@
-import {useState, useEffect} from "react";
-import { Flame, FireExtinguisher, CircleDot} from "lucide-react";
+import { useState } from "react";
+import {
+  Flame,
+  FireExtinguisher,
+  CircleDot,
+  MousePointerClick,
+} from "lucide-react";
 import { Outlet, useNavigate } from "react-router-dom";
 import SelectForm from "../components/SelectForm";
 import ResultPanel from "../components/ResultPanel";
@@ -11,19 +16,19 @@ import { Button } from "../components/ui/button";
 interface CheckResultProps {
   id: string;
   room_name: string;
-  room_area: string;
+  room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
-  rating: number; 
-  result: string; 
+  rating: number;
+  result: string;
 }
 
 // TODO: Props to be changed based on result output of AI model
 interface InferResultProps {
   id: string;
   room_name: string;
-  room_area: string;
+  room_area: number;
   room_vertices: [number, number][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
@@ -33,11 +38,12 @@ interface InferResultProps {
 
 const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
 
-  const [checkResults, setCheckResults] = useState<CheckResultProps[]>([]); 
+  const [checkResults, setCheckResults] = useState<CheckResultProps[]>([]);
   const [inferResults, setInferResults] = useState<InferResultProps[]>([]);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   return (
     <div className="w-full h-full py-5 px-10 overflow-hidden">
@@ -71,6 +77,7 @@ const Landing = () => {
               disabled={isLoading}
               onClick={() => {
                 navigate("/extinguisher-plan");
+                setIsViewing(true);
               }}
             >
               Extinguisher <FireExtinguisher className="w-4 h-4 ml-2" />
@@ -80,12 +87,24 @@ const Landing = () => {
               disabled={isLoading}
               onClick={() => {
                 navigate("/hosereel-plan");
+                setIsViewing(true);
               }}
             >
               Hosereel <CircleDot className="w-4 h-4 ml-2" />
             </Button>
           </div>
-          <Outlet />
+          {isViewing ? (
+            <Outlet />
+          ) : (
+            <div
+              className="border border-primary/10 rounded-md flex flex-col
+               justify-center items-center text-2xl text-gray-400 font-semibold"
+              style={{ height: "calc(100vh - 180px)" }}
+            >
+              Select type of plan to view.
+              <MousePointerClick size={80} className="mt-2"/>
+            </div>
+          )}
         </div>
       </div>
     </div>
