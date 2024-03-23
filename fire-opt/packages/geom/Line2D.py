@@ -6,6 +6,15 @@ __author__ = "Bob YX Lee"
 
 import numpy as np
 
+def distance2D(p1, p2):
+    """
+    Measures distance between two points in 2D
+    """
+    p1 = np.array([p1[0], p1[1]])
+    p2 = np.array([p2[0], p2[1]])
+    
+    return np.linalg.norm(p2 - p1)
+
 class Line2D:
     
     def __init__(self, p1 = [0,0], p2 = [1,1]):
