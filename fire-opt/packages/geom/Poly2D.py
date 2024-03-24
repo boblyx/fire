@@ -89,10 +89,11 @@ def getLines(poly, closed = False):
     """
     lines = []
     for i, p in enumerate(poly):
-        start = [p[0], p[1]]
+        pt = list(p)
+        start = [pt[0], pt[1]]
         if closed == True and i == len(poly) - 1:
-            end = [poly[0][0], poly[0][1]]  
+            end = [list(poly[0])[0], list(poly[0])[1]]  
         else:
-            end = [poly[i+1][0], poly[i+1][1]]
+            end = [list(poly[i+1])[0], list(poly[i+1])[1]]
         lines.append(Line2D(start, end))
     return lines
