@@ -76,7 +76,7 @@ const Landing = () => {
               size="sm"
               disabled={isLoading}
               onClick={() => {
-                navigate("/extinguisher-plan");
+                navigate("./extinguisher-plan");
                 setIsViewing(true);
               }}
             >
@@ -86,7 +86,7 @@ const Landing = () => {
               size="sm"
               disabled={isLoading}
               onClick={() => {
-                navigate("/hosereel-plan");
+                navigate("./hosereel-plan");
                 setIsViewing(true);
               }}
             >

@@ -7,8 +7,8 @@
         xmlns:local="clr-namespace:fire_rvt"
         mc:Ignorable="d"
         Title="Fire"
-        Width="800"
-        Height="600"
+        Width="1190"
+        Height="850"
         ResizeMode="CanResize">
 
     <Window.Resources>
