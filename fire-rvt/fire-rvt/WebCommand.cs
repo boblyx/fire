@@ -24,6 +24,7 @@ namespace fire_rvt
             try
             {
                 WebWindow webWindow = new WebWindow(commandData.Application);
+                App.rvtHandler.webWindow = webWindow;
                 webWindow.Show();
                 return Result.Succeeded;
             }

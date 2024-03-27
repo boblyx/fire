@@ -11,9 +11,9 @@ const App = () => {
     <div className="App">
       <ResultContextProvider>
         <Routes>
-          <Route path="/" element={<Landing />}>
-            <Route path="extinguisher-plan" element={<ExtinguisherPlan />} />
-            <Route path="hosereel-plan" element={<HosereelPlan />} />
+          <Route path="/index.html" element={<Landing />}>
+            <Route path="/index.html/extinguisher-plan" element={<ExtinguisherPlan />} />
+            <Route path="/index.html/hosereel-plan" element={<HosereelPlan />} />
           </Route>
           <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
         </Routes>

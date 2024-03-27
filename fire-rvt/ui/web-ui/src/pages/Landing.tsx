@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Flame,
   FireExtinguisher,
@@ -11,6 +11,11 @@ import ResultPanel from "../components/ResultPanel";
 
 import { Separator } from "../components/ui/separator";
 import { Button } from "../components/ui/button";
+
+interface FloorProps {
+  id: string;
+  name: string;
+}
 
 // TODO: Props to be changed based on result output of AI model
 interface CheckResultProps {
@@ -36,6 +41,36 @@ interface InferResultProps {
   result: string;
 }
 
+/*
+ * Updates the state of the floor collection
+ * */
+function updateFloors(e : any = {}){
+  console.log("Updating Floors!");
+  console.log(e);
+  let floors = e.detail?.Floors;
+  if(floors == null) { return };
+  document.dispatchEvent(new CustomEvent('setAllFloors', {
+    "detail": floors
+  }));
+}
+
+/**
+ * Triggers Revit to get Floor info.
+ */
+function getFloors(){
+  console.log("Getting Floors!");
+  let wv2msg = {"action": "getFloors", "payload": String(updateFloors.name)}
+  console.log(wv2msg);
+  try{
+    let w = window as any
+    w.chrome?.webview?.postMessage(wv2msg);
+  }catch(err){
+    // May be able to send the function name.
+    console.log("Not in Revit context. Aborting.");
+  }
+}
+
+
 const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isViewing, setIsViewing] = useState(false);
@@ -43,7 +78,17 @@ const Landing = () => {
   const [checkResults, setCheckResults] = useState<CheckResultProps[]>([]);
   const [inferResults, setInferResults] = useState<InferResultProps[]>([]);
 
+
   const navigate = useNavigate();
+
+  useEffect(()=>{
+
+    // Create listeners for Revit to dispatch events to send data back to frontend.
+    document.addEventListener('updateFloors', (e) => {updateFloors(e)});
+    document.addEventListener('updateRooms', (e) => {});
+    
+    getFloors(); // On mount, ask Revit to get all the levels.
+  });
 
   return (
     <div className="w-full h-full py-5 px-10 overflow-hidden">
@@ -76,7 +121,7 @@ const Landing = () => {
               size="sm"
               disabled={isLoading}
               onClick={() => {
-                navigate("/extinguisher-plan");
+                navigate("./extinguisher-plan");
                 setIsViewing(true);
               }}
             >
@@ -86,7 +131,7 @@ const Landing = () => {
               size="sm"
               disabled={isLoading}
               onClick={() => {
-                navigate("/hosereel-plan");
+                navigate("./hosereel-plan");
                 setIsViewing(true);
               }}
             >

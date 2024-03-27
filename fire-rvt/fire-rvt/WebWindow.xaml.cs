@@ -49,26 +49,38 @@ namespace fire_rvt
 
             switch (result.action)
             {
-                case "test":
-                    // Call a JS function from Revit
-                    await webView.CoreWebView2.ExecuteScriptAsync("testFromWV2()");
+                case "getFloors":
+                    Debug.WriteLine("Getting Floors!");
+                    App.rvtHandler.Raise(RevitEventHandler.RevitActionsEnum.GetFloors);
                     break;
 
-                case "loaded":
-                    // Callback from WebView2
-                    Debug.WriteLine("Commencing payload assembly");
-                    isLoaded = true;
-                    //App.rvtHandler.Raise(RevitEventHandler.RevitActionsEnum.Loaded);
+                case "getRooms":
+                    Debug.WriteLine("Getting Floors!");
+                    App.rvtHandler.Raise(RevitEventHandler.RevitActionsEnum.GetRooms);
                     break;
+
+                case "placeExtinguishers":
+                    // TODO
+                    Debug.WriteLine("Placing Extinguishers!");
+                    break;
+
                 default:
+                    Debug.WriteLine(result.action);
+                    Debug.WriteLine(result.payload);
                     Debug.WriteLine("Unhandled action. Ignoring.");
                     break;
             }
         }
 
-        public async void SendPayload(string payload)
+        public async void SendPayload(string fn, string payload)
         {
-            string payloadScript = "sendPayload(" + "{"+payload+"}" + ")";
+            /**
+             * Instead of getting the calling the function, because React minifies everything,
+             * We have to put an EventListener at `document` to listen for events dispatched there
+             * The listeners will then call the appropriate function.
+             */
+            string payloadScript = "document.dispatchEvent(new CustomEvent(\"" + fn + "\", {\"detail\":" + payload + "}))";
+            Debug.WriteLine(payloadScript);
             var res1 = await webView.CoreWebView2.ExecuteScriptAsync(payloadScript);
             Debug.WriteLine(res1);
             return;

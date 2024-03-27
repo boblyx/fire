@@ -63,7 +63,8 @@ namespace fire_rvt
                     {
                         headers = "Content-Type: application/javascript";
                     }
-                    else if (assets_file_path.EndsWith(".json"))
+                    else if (assets_file_path.EndsWith(".json")
+                            || assets_file_path.EndsWith(".map"))
                     {
                         headers = "Content-Type: application/json";
                     }

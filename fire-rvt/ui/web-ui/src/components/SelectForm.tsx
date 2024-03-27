@@ -31,7 +31,7 @@ import {
 
 interface FloorProps {
   id: string;
-  floor_name: string;
+  name: string;
 }
 
 interface RoomProps {
@@ -73,15 +73,15 @@ interface ResultProps {
 }
 
 const formSchema = z.object({
-  floor_name: z.string().min(1, { message: "Floor name is required." }),
+  name: z.string().min(1, { message: "Floor name is required." }),
   room_name: z.string().min(1, { message: "Room name is required." }),
 });
 
 // Dummy floor data - TO REMOVE LATER
-const floorList: FloorProps[] = [
-  { id: "88ea5414-4d31-4918-9d81-d97294d15b5b", floor_name: "1F" },
-  { id: "e5476423-6ce2-433f-a831-defe1a8c6867", floor_name: "2F" },
-  { id: "779ce6c0-2e2e-42ff-850d-adcb51edd8da", floor_name: "3F" },
+let floorList: FloorProps[] = [
+  { id: "88ea5414-4d31-4918-9d81-d97294d15b5b", name: "1F" },
+  { id: "e5476423-6ce2-433f-a831-defe1a8c6867", name: "2F" },
+  { id: "779ce6c0-2e2e-42ff-850d-adcb51edd8da", name: "3F" },
 ];
 
 // Dummy room data - TO REMOVE LATER
@@ -172,7 +172,7 @@ const SelectForm: React.FC<ResultProps> = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      floor_name: "",
+      name: "",
       room_name: "",
     },
   });
@@ -182,7 +182,7 @@ const SelectForm: React.FC<ResultProps> = ({
   const isLoading = formState.isSubmitting;
 
   // Reads user input for floor name field.
-  const floorNameValue = watch("floor_name");
+  const floorNameValue = watch("name");
 
   // TODO: Stub function to do get request to Revit API to retrieve all relevant floor data. Change the API URL accordingly.
   const getFloors = async (): Promise<FloorProps[]> => {
@@ -200,12 +200,7 @@ const SelectForm: React.FC<ResultProps> = ({
 
   // TODO: Stub function to do get request to Revit API to retrieve all relevant room data based on floor name input. Change the API URL accordingly.
   // May not require getRoomBoundary stub function as would require another API request to Revit?
-  const getRooms = async (floor_id: string): Promise<RoomProps[]> => {
-    const response = await axios.get("https://your-api-endpoint.com/rooms");
-    return response.data;
-  };
-
-  // TODO: To amend this useEffect method once api endpoint is confirmed. useEffect runs every time floor name changes.
+  
   useEffect(() => {
     /*
     getRooms(floorNameValue).then(setAllRooms).catch(error => console.error('Failed to fetch rooms:', error))
@@ -307,10 +302,52 @@ const SelectForm: React.FC<ResultProps> = ({
     }
   };
 
+
+  /*
+   * Updates the state of the Room collection
+   * */
+  function updateRooms(e : any = {}){
+    console.log("Updating Floors!");
+    console.log(e);
+    let floors = e.detail?.Floors;
+    if(floors == null) { return };
+    document.dispatchEvent(new CustomEvent('setAllFloors', {
+      "detail": floors
+    }));
+  }
+
+
+  /**
+   * Triggers Revit to get Room info.
+   */
+  function getRooms(e : string){
+    console.log("Getting Rooms!");
+    console.log(e)
+    let wv2msg = {"action": "getRooms", "payload": {"fn": "updateRooms", "level": e}}
+    console.log(wv2msg);
+    try{
+      let w = window as any
+      w.chrome?.webview?.postMessage(wv2msg);
+    }catch(err){
+      // May be able to send the function name.
+      console.log("Not in Revit context. Aborting.");
+    }
+  }
+
   // Reset form fields upon successful submission
   useEffect(() => {
+      document.addEventListener("setAllFloors", (e : any) => {
+        // FIXME: To avoid multiple event updates...
+        // Currently its because event listener is on all SelectForm instances...
+        // May need to differentiate it.
+        console.log("Setting all floors!");
+        console.log(e);
+        setAllFloors(e.detail);
+        // TODO: Dispatch another revit event to get the rooms of the floor.
+      });
+
     if (formState.isSubmitSuccessful) {
-      reset({ floor_name: "", room_name: "" });
+      reset({ name: "", room_name: "" });
     }
   }, [formState, reset]);
 
@@ -322,16 +359,16 @@ const SelectForm: React.FC<ResultProps> = ({
           className="space-y-4"
         >
           <FormField
-            name="floor_name"
+            name="name"
             control={control}
             render={({ field }) => (
-              <FormItem className="col-span-1 md:col-span-1">
+              <FormItem id="floor-select" className="col-span-1 md:col-span-1">
                 <FormLabel className="text-lg font-bold flex justify-start">
                   Floor
                 </FormLabel>
                 <Select
                   disabled={isLoading || allFloors.length === 0}
-                  onValueChange={field.onChange}
+                  onValueChange={(e)=>{field.onChange(e); getRooms(e)}} // Trigger when floor is selected to get the floor's rooms
                   value={field.value}
                 >
                   <FormControl>
@@ -342,10 +379,10 @@ const SelectForm: React.FC<ResultProps> = ({
                       />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent >
                     {allFloors?.map((floor) => (
-                      <SelectItem key={floor.id} value={floor.floor_name}>
-                        {floor.floor_name}
+                      <SelectItem key={floor.id} value={floor.name}>
+                        {floor.name}
                       </SelectItem>
                     ))}
                   </SelectContent>

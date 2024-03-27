@@ -18,8 +18,10 @@ namespace fire_rvt
 
     class App : IExternalApplication
     {
+        public static RevitEventHandler rvtHandler;
         public Result OnStartup(UIControlledApplication a)
         {
+            rvtHandler = new RevitEventHandler();
             a.CreateRibbonTab("Fire");
             RibbonPanel ribbon = a.CreateRibbonPanel("Fire", "Check");
 
