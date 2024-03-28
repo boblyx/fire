@@ -125,9 +125,13 @@ const ExtinguisherPlan = () => {
   return (
     <div
       className="border border-primary/10 rounded-md flex justify-center items-center"
-      style={{ height: "calc(100vh - 180px)" }}
+      style={{ height: "calc(100vh - 180px)", overflow: "hidden" }}
     >
-      {results.length !==0 ? <PlanSVG resultData={results[0]} /> : <div className="text-2xl text-gray-200 font-bold"> Loading ...</div>}
+      {results.length !== 0 ? (
+        <PlanSVG resultData={results[0]} />
+      ) : (
+        <div className="text-2xl text-gray-200 font-bold"> Loading ...</div>
+      )}
     </div>
   );
 };
