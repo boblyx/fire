@@ -24,7 +24,8 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
         <div>Loading...</div>
       ) : (
         <svg
-          viewBox="0 0 10000 24000"
+          viewBox="0 0 12000 24000"
+          preserveAspectRatio="xMidYMid meet"
           style={{ width: "100%", height: "auto" }}
         >
           {/* Draw the room */}
