@@ -39,7 +39,7 @@ def gData():
     return data
 
 if __name__ == "__main__":
-    for i in range(0,1000):
+    for i in range(0,10000):
         out_dict["data"].append(gData())
         print("Data point %d created." % i)
         pass
