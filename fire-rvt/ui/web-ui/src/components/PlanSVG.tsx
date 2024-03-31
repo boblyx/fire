@@ -1,4 +1,11 @@
+/**
+ * PlanSVG.tsx
+ * Component for rendering floorplans as SVGs.
+ */
+import { useEffect } from "react";
 // TODO: Props to be changed based on result output of AI model. Shared between check and infer result props.
+// Bob: vertices may not have to be supplied at the start
+
 interface ResultProps {
   id: string;
   room_name: string;
@@ -10,6 +17,19 @@ interface ResultProps {
   result: string;
 }
 
+/**
+ * Loading only the room as a polyline.
+ * Data are a list of polylines.
+ * Polylines are composed of multiple line segments
+ * Polylines in the 0th index is the largest
+ * 1st index onwards are columns / other obstacles
+ * whose vertices have to be reversed to render properly
+ * @author Bob YX Lee
+ */
+function loadRoom(data : any){
+  
+}
+
 const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
   const roomPoints = resultData.room_vertices
     .map((vertex) => vertex.join(","))
@@ -17,6 +37,10 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
   const pathPoints = resultData.path_vertices
     .map((vertex) => vertex.join(","))
     .join(" ");
+
+  useEffect(()=>{
+    document.addEventListener("room-selected", (data)=>{loadRoom(data)}); 
+  });
 
   return (
     <div>
@@ -28,7 +52,8 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
           preserveAspectRatio="xMidYMid meet"
           style={{ width: "100%", height: "auto" }}
         >
-          {/* Draw the room */}
+          {/* Draw the room 
+          MUST be an SVG path*/}
           <polygon
             points={roomPoints}
             fill="lightblue"

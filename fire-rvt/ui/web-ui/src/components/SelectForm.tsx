@@ -1,3 +1,8 @@
+/**
+ * SelectForm.tsx
+ * Component for rendering dropdown boxes for 
+ * users to select floors / rooms 
+ */
 import {
   useState,
   useEffect,
@@ -29,17 +34,21 @@ import {
   FormMessage,
 } from "../components/ui/form";
 
+import { SAMPLE_FLOORS } from "./samples/floor";
+
+
+interface RoomProps {
+  id : string;
+  name : string;
+  level : string;
+  vertices: number[][][][];
+  //extinguisher_vertices: [number, number][] | null;
+}
+
 interface FloorProps {
   id: string;
   name: string;
-}
-
-interface RoomProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][] | null;
+  rooms : RoomProps[] | null; // TODO: change to RoomProps
 }
 
 // TODO: Props to be changed based on result output of AI model
@@ -78,78 +87,7 @@ const formSchema = z.object({
 });
 
 // Dummy floor data - TO REMOVE LATER
-let floorList: FloorProps[] = [
-  { id: "88ea5414-4d31-4918-9d81-d97294d15b5b", name: "1F" },
-  { id: "e5476423-6ce2-433f-a831-defe1a8c6867", name: "2F" },
-  { id: "779ce6c0-2e2e-42ff-850d-adcb51edd8da", name: "3F" },
-];
-
-// Dummy room data - TO REMOVE LATER
-const roomList: RoomProps[] = [
-  {
-    id: "b98e01f0-35d5-460c-975f-6a63406d8f52",
-    room_name: "2F - Office",
-    room_area: 70,
-    room_vertices: [
-      [0, 0],
-      [8000, 0],
-      [8000, 5000],
-      [5000, 5000],
-      [5000, 19000],
-      [8000, 19000],
-      [8000, 23000],
-      [0, 23000],
-      [0, 0],
-    ],
-    extinguisher_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-  },
-  {
-    id: "67a1ba45-3e13-4ba1-99f6-f931f50dabfc",
-    room_name: "2F - Pantry",
-    room_area: 70,
-    room_vertices: [
-      [0, 0],
-      [8000, 0],
-      [8000, 5000],
-      [5000, 5000],
-      [5000, 19000],
-      [8000, 19000],
-      [8000, 23000],
-      [0, 23000],
-      [0, 0],
-    ],
-    extinguisher_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-  },
-  {
-    id: "b1955505-0c05-40d4-abe7-fb27c6e1067f",
-    room_name: "2F - Corridor",
-    room_area: 70,
-    room_vertices: [
-      [0, 0],
-      [8000, 0],
-      [8000, 5000],
-      [5000, 5000],
-      [5000, 19000],
-      [8000, 19000],
-      [8000, 23000],
-      [0, 23000],
-      [0, 0],
-    ],
-    extinguisher_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-  },
-];
+let floorList: FloorProps[] = SAMPLE_FLOORS;
 
 const SelectForm: React.FC<ResultProps> = ({
   setCheckResults,
@@ -202,10 +140,6 @@ const SelectForm: React.FC<ResultProps> = ({
   // May not require getRoomBoundary stub function as would require another API request to Revit?
   
   useEffect(() => {
-    /*
-    getRooms(floorNameValue).then(setAllRooms).catch(error => console.error('Failed to fetch rooms:', error))
-    */
-    setAllRooms(roomList);
   }, [floorNameValue]);
 
   // Handle form submit for check
@@ -213,6 +147,7 @@ const SelectForm: React.FC<ResultProps> = ({
   const checkExtinguisherPlacement = async (
     values: z.infer<typeof formSchema>,
   ) => {
+    /*
     try {
       // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
       const chosenRoom = allRooms.filter(
@@ -252,7 +187,7 @@ const SelectForm: React.FC<ResultProps> = ({
         title: "Error!",
         description: "Failure to submit room data. Please try again.",
       });
-    }
+      }*/
   };
 
   // Handle form submit for inference
@@ -260,6 +195,7 @@ const SelectForm: React.FC<ResultProps> = ({
   const inferExtinguisherPlacement = async (
     values: z.infer<typeof formSchema>,
   ) => {
+    /*
     try {
       // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
       const chosenRoom = allRooms.filter(
@@ -299,13 +235,15 @@ const SelectForm: React.FC<ResultProps> = ({
         title: "Error!",
         description: "Failure to submit room data. Please try again.",
       });
-    }
+      }
+      */
   };
 
 
-  /*
+  /**
    * Updates the state of the Room collection
-   * */
+   * @author Bob YX Lee
+   */
   function updateRooms(e : any = {}){
     console.log("Updating Floors!");
     console.log(e);
@@ -316,22 +254,28 @@ const SelectForm: React.FC<ResultProps> = ({
     }));
   }
 
-
   /**
-   * Triggers Revit to get Room info.
+   * Triggers population of rooms dropdown to get Room info.
+   * @author Bob YX Lee
    */
   function getRooms(e : string){
     console.log("Getting Rooms!");
-    console.log(e)
-    let wv2msg = {"action": "getRooms", "payload": {"fn": "updateRooms", "level": e}}
-    console.log(wv2msg);
-    try{
-      let w = window as any
-      w.chrome?.webview?.postMessage(wv2msg);
-    }catch(err){
-      // May be able to send the function name.
-      console.log("Not in Revit context. Aborting.");
+    console.log(allFloors);
+    console.log(e);
+    let the_floor : any = null;
+    for(let i = 0; i < allFloors.length; i++){
+      if(e !== allFloors[i].name){ continue }
+      the_floor = allFloors[i] as FloorProps;
     }
+    if (the_floor == null){ return; };
+
+    // Since floors already contain room info,
+    // We can just load directly from the floor collection
+    
+    setAllRooms(the_floor.rooms);
+    // TODO change room placeholder to say: "Select Room"
+    // when rooms are loaded
+    
   }
 
   // Reset form fields upon successful submission
@@ -343,7 +287,6 @@ const SelectForm: React.FC<ResultProps> = ({
         console.log("Setting all floors!");
         console.log(e);
         setAllFloors(e.detail);
-        // TODO: Dispatch another revit event to get the rooms of the floor.
       });
 
     if (formState.isSubmitSuccessful) {
@@ -408,14 +351,14 @@ const SelectForm: React.FC<ResultProps> = ({
                     <SelectTrigger className="bg-background">
                       <SelectValue
                         defaultValue={field.value}
-                        placeholder="Select Room"
+                        placeholder="Select a Floor First"
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {allRooms?.map((room) => (
-                      <SelectItem key={room.id} value={room.room_name}>
-                        {room.room_name}
+                      <SelectItem key={room.id} value={room.name}>
+                        {room.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
