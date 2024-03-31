@@ -9,6 +9,11 @@ using System.Threading;
 using Autodesk.Revit.UI.Selection;
 #endregion
 
+/// <summary>
+/// For showing the Web UI window.
+/// Author: Bob Lee
+/// </summary>
+
 namespace fire_rvt
 {
     [Transaction(TransactionMode.Manual)]

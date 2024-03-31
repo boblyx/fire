@@ -10,7 +10,10 @@ using System.Reflection;
 using System.Drawing;
 using System.Drawing.Imaging;
 #endregion
-
+/// <summary>
+/// Initializes Revit ribbon plugin
+/// Author: Bob Lee
+/// </summary>
 namespace fire_rvt
 {
     [Transaction(TransactionMode.Manual)]

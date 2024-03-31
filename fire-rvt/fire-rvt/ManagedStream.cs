@@ -1,6 +1,10 @@
 ﻿using System;
 using System.IO;
 
+/// <summary>
+/// For streaming local assets.
+/// </summary>
+
 namespace fire_rvt
 {
     class ManagedStream : Stream

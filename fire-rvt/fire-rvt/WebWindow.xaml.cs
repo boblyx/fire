@@ -7,6 +7,11 @@ using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
+/// <summary>
+/// For Interop between Web UI and Revit
+/// Author: Bob Lee
+/// </summary>
+
 namespace fire_rvt
 {
     public partial class WebWindow : Window

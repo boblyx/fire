@@ -2,6 +2,11 @@
 using System.Diagnostics;
 using Autodesk.Revit.UI;
 
+/// <summary>
+/// For executing Revit Routines when called from Web UI
+/// Author: Bob Lee
+/// </summary>
+
 namespace fire_rvt
 {
     public class RevitEventHandler : IExternalEventHandler

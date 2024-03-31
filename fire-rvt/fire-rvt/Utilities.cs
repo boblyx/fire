@@ -7,6 +7,11 @@ using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 
+/// <summary>
+/// Miscellaneous Functions
+/// Author: Bob Lee
+/// </summary>
+
 namespace fire_rvt
 {
     public class Utilities

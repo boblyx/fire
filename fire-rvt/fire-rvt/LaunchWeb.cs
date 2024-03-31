@@ -5,6 +5,11 @@ using Microsoft.Web.WebView2.Wpf;
 using Microsoft.Web.WebView2.Core;
 using System.IO;
 
+/// <summary>
+/// Launches Web UI
+/// Author: Bob Lee
+/// </summary>
+
 namespace fire_rvt
 {
     public class LaunchWeb

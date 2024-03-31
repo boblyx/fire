@@ -8,7 +8,10 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 #endregion
-
+/// <summary>
+/// Provides Revit Command for plugin functions to be called.
+/// Author: Bob Lee
+/// </summary>
 namespace fire_rvt
 {
     [Transaction(TransactionMode.Manual)]
