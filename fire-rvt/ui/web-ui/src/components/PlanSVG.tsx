@@ -27,19 +27,22 @@ interface ResultProps {
  * @author Bob YX Lee
  */
 function loadRoom(data : any){
-  
+    let room = data["detail"];
+    console.log(room);
 }
 
 const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
-  const roomPoints = resultData.room_vertices
+  let roomPoints = resultData.room_vertices
     .map((vertex) => vertex.join(","))
     .join(" ");
-  const pathPoints = resultData.path_vertices
+  let pathPoints = resultData.path_vertices
     .map((vertex) => vertex.join(","))
     .join(" ");
 
   useEffect(()=>{
-    document.addEventListener("room-selected", (data)=>{loadRoom(data)}); 
+    document.addEventListener("draw-room", (data)=>{
+        loadRoom(data)
+    }); 
   });
 
   return (

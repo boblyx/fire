@@ -95,6 +95,8 @@ const SelectForm: React.FC<ResultProps> = ({
 }) => {
   const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
   const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
+  const [currentFloor, setCurrentFloor] = useState<FloorProps>();
+  const [currentRoom, setCurrentRoom] = useState<RoomProps>();
 
   const context = useContext(ResultContext);
 
@@ -272,10 +274,31 @@ const SelectForm: React.FC<ResultProps> = ({
     // Since floors already contain room info,
     // We can just load directly from the floor collection
     
+    setCurrentFloor(the_floor);
     setAllRooms(the_floor.rooms);
     // TODO change room placeholder to say: "Select Room"
     // when rooms are loaded
     
+  }
+  /**
+   * Triggers draw room routine.
+   */
+  function drawRoom(e : string){
+    console.log("Drawing room!");
+    console.log(currentFloor);
+    console.log(e);
+    if((currentFloor?.rooms == undefined)){return;}
+    // Get the room
+    let the_room : any;
+    for(let i = 0; i < currentFloor.rooms.length; i++){
+        let c_rm = currentFloor.rooms[i];
+        if(!(c_rm.name == e)){ continue; }
+        the_room = c_rm;
+        break;
+    }
+    if(the_room == undefined){ return; }
+    document.dispatchEvent(new CustomEvent('draw-room', {"detail": the_room}));
+    return;
   }
 
   // Reset form fields upon successful submission
@@ -344,7 +367,7 @@ const SelectForm: React.FC<ResultProps> = ({
                 </FormLabel>
                 <Select
                   disabled={isLoading || allRooms.length === 0}
-                  onValueChange={field.onChange}
+                  onValueChange={(e) => {field.onChange(e); drawRoom(e)}}
                   value={field.value}
                 >
                   <FormControl>
