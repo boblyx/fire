@@ -7,7 +7,7 @@ UI for web application lauched from created Revit plugin.
 - [x] Implement zoom.
 - [x] Allow entire floor rooms to be visualized when floor is chosen.
 - [x] Fix polygon preview by changing to SVG path.
-- [ ] Reflect result properly in result panel.
+- [x] Reflect result properly in result panel.
 - [ ] Send payload to server.
 
 ## Installation

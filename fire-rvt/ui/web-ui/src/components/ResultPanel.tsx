@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import axios from "axios";
 
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
 import { InferResultProps, CheckResultProps } from "./Interfaces";
+
+import { ResultContext } from "../contexts/ResultContext";
 
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
@@ -86,7 +88,13 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
   >([]);
 
   const { toast } = useToast();
+  const context = useContext(ResultContext);
 
+  const {
+    checkResultData,
+    currentRoom,
+  } = context;
+  /*
   // UseEffect method should checkResults get updated.
   useEffect(() => {
     setResults(checkResults);
@@ -96,14 +104,14 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
   useEffect(() => {
     setResults(inferResults);
   }, [inferResults]);
+  */
 
-  // TO REMOVE: DUMMY Useeffect method for dummy data.
-  useEffect(() => {
-    setResults(checkResultList);
-  }, []);
-  useEffect(() => {
-    setResults(inferResultList);
-  }, []);
+  useEffect(()=>{
+    console.log(checkResultData);
+    if(checkResultData.length <= 0) { return };
+    if(checkResultData == undefined){ return };
+    setResults(checkResultData);
+  }, [checkResultData]);
 
   const exportExtinguisherPlacement = async () => {
     try {
@@ -159,7 +167,7 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
             <div>{results[0].rating}</div>
           </div>
           <div className="flex justify-between">
-            <div className="font-bold">Result:</div>
+            <div className="font-bold">Compliance:</div>
             <div className="border px-2 rounded-md bg-green-400 font-bold">
               {results[0].result}
             </div>

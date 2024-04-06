@@ -6,30 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 
-// TODO: Props to be changed based on result output of AI model
-export interface CheckResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-}
-
-// TODO: Props to be changed based on result output of AI model
-export interface InferResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-}
-
+import { CheckResultProps, InferResultProps } from "@/components/Interfaces";
 export interface RoomProps {
   id : string;
   name : string;

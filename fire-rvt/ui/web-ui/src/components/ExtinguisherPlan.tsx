@@ -4,7 +4,6 @@
 import { useState, useEffect, useContext } from "react";
 import { ResultContext, RoomProps } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
-import { FloorProps } from "../contexts/ResultContext";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 
 function linesToVerts(cverts : number[][][]){
@@ -45,6 +44,7 @@ const ExtinguisherPlan = () => {
   >([]);
   const context = useContext(ResultContext);
   const {
+    setCheckResultData,
     currentRoom,
     currentFloor,
   } = context;
@@ -63,6 +63,7 @@ const ExtinguisherPlan = () => {
         "floor": currentFloor
     }
     setResults([chkdata]);
+    setCheckResultData([chkdata]);
   }, [currentRoom]);
 
   return (
