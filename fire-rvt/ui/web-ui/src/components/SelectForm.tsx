@@ -93,10 +93,10 @@ const SelectForm: React.FC<ResultProps> = ({
   setCheckResults,
   setInferResults,
 }) => {
-  const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
-  const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
-  const [currentFloor, setCurrentFloor] = useState<FloorProps>();
-  const [currentRoom, setCurrentRoom] = useState<RoomProps>();
+  //const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
+  //const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
+  //const [currentFloor, setCurrentFloor] = useState<FloorProps>();
+  //const [currentRoom, setCurrentRoom] = useState<RoomProps>();
 
   const context = useContext(ResultContext);
 
@@ -105,6 +105,14 @@ const SelectForm: React.FC<ResultProps> = ({
     setCheckResultData,
     inferResultData,
     setInferResultData,
+    allFloors,
+    setAllFloors,
+    allRooms,
+    setAllRooms,
+    currentRoom,
+    setCurrentRoom,
+    currentFloor,
+    setCurrentFloor
   } = context;
 
   const { toast } = useToast();
@@ -297,7 +305,9 @@ const SelectForm: React.FC<ResultProps> = ({
         break;
     }
     if(the_room == undefined){ return; }
-    document.dispatchEvent(new CustomEvent('draw-room', {"detail": the_room}));
+    setCurrentRoom(the_room);
+    document.dispatchEvent(new CustomEvent('show-plan'));
+    //document.dispatchEvent(new CustomEvent('draw-room', {"detail": the_room}));
     return;
   }
 

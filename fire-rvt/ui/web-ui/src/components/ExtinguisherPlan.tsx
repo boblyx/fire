@@ -102,8 +102,18 @@ const ExtinguisherPlan = () => {
     setCheckResultData,
     inferResultData,
     setInferResultData,
+    allFloors,
+    setAllFloors,
+    allRooms,
+    setAllRooms,
+    currentRoom,
+    setCurrentRoom,
+    currentFloor,
+    setCurrentFloor
   } = context;
 
+
+  /*
   // UseEffect method should checkResults get updated.
   useEffect(() => {
     setResults(checkResultData);
@@ -121,6 +131,11 @@ const ExtinguisherPlan = () => {
   useEffect(() => {
     setResults(inferResultList);
   }, []);
+  */
+
+  useEffect(()=>{
+    console.log(currentRoom);
+  });
 
   return (
     <div

@@ -40,9 +40,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     .join(" ");
 
   useEffect(()=>{
-    document.addEventListener("draw-room", (data)=>{
-        loadRoom(data)
-    }); 
+    document.addEventListener("draw-room", (data)=>{loadRoom(data)}); 
   });
 
   return (
@@ -58,6 +56,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
           {/* Draw the room 
           MUST be an SVG path*/}
           <polygon
+            id = "floor-plan"
             points={roomPoints}
             fill="lightblue"
             stroke="blue"

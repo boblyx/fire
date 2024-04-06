@@ -70,7 +70,6 @@ function getFloors(){
   }
 }
 
-
 const Landing = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isViewing, setIsViewing] = useState(false);
@@ -82,10 +81,13 @@ const Landing = () => {
   const navigate = useNavigate();
 
   useEffect(()=>{
-
     // Create listeners for Revit to dispatch events to send data back to frontend.
     document.addEventListener('updateFloors', (e) => {updateFloors(e)});
     document.addEventListener('updateRooms', (e) => {});
+    document.addEventListener('show-plan', (e) => {
+        navigate("./extinguisher-plan");
+        setIsViewing(true);
+    });
     
     getFloors(); // On mount, ask Revit to get all the levels.
   });
@@ -123,33 +125,34 @@ const Landing = () => {
               onClick={() => {
                 navigate("./extinguisher-plan");
                 setIsViewing(true);
-              }}
-            >
+              }}>
               Extinguisher <FireExtinguisher className="w-4 h-4 ml-2" />
             </Button>
+            {/*
             <Button
               size="sm"
               disabled={isLoading}
               onClick={() => {
                 navigate("./hosereel-plan");
                 setIsViewing(true);
-              }}
-            >
+              }}>
               Hosereel <CircleDot className="w-4 h-4 ml-2" />
             </Button>
+            */}
           </div>
+            
           {isViewing ? (
             <Outlet />
           ) : (
             <div
               className="border border-primary/10 rounded-md flex flex-col
                justify-center items-center text-2xl text-gray-400 font-semibold"
-              style={{ height: "calc(100vh - 180px)" }}
-            >
-              Select type of plan to view.
+              style={{ height: "calc(100vh - 180px)" }}>
+              Select Room to view.
               <MousePointerClick size={80} className="mt-2"/>
             </div>
           )}
+
         </div>
       </div>
     </div>
