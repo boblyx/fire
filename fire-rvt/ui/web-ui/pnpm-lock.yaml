@@ -47,6 +47,9 @@ dependencies:
   '@types/react-dom':
     specifier: ^18.2.21
     version: 18.2.22
+  '@visx/zoom':
+    specifier: ^3.3.0
+    version: 3.3.0(react@18.2.0)
   axios:
     specifier: ^1.6.8
     version: 1.6.8
@@ -3449,6 +3452,42 @@ packages:
 
   /@ungap/structured-clone@1.2.0:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+    dev: false
+
+  /@use-gesture/core@10.3.1:
+    resolution: {integrity: sha512-WcINiDt8WjqBdUXye25anHiNxPc0VOrlT8F6LLkU6cycrOGUDyY/yyFmsg3k8i5OLvv25llc0QC45GhR/C8llw==}
+    dev: false
+
+  /@use-gesture/react@10.3.1(react@18.2.0):
+    resolution: {integrity: sha512-Yy19y6O2GJq8f7CHf7L0nxL8bf4PZCPaVOCgJrusOeFHY1LvHgYXnmnXg6N5iwAnbgbZCDjo60SiM6IPJi9C5g==}
+    peerDependencies:
+      react: '>= 16.8.0'
+    dependencies:
+      '@use-gesture/core': 10.3.1
+      react: 18.2.0
+    dev: false
+
+  /@visx/event@3.3.0:
+    resolution: {integrity: sha512-fKalbNgNz2ooVOTXhvcOx5IlEQDgVfX66rI7bgZhBxI2/scy+5rWcXJXpwkheRF68SMx9R93SjKW6tmiD0h+jA==}
+    dependencies:
+      '@types/react': 18.2.69
+      '@visx/point': 3.3.0
+    dev: false
+
+  /@visx/point@3.3.0:
+    resolution: {integrity: sha512-03eBBIJarkmX79WbeEGTUZwmS5/MUuabbiM9KfkGS9pETBTWkp1DZtEHZdp5z34x5TDQVLSi0rk1Plg3/8RtDg==}
+    dev: false
+
+  /@visx/zoom@3.3.0(react@18.2.0):
+    resolution: {integrity: sha512-ijSitmJWbhupAe1F0LTsusg/WWEvYBcxV9iOHmTbGHhgpdKuhmZCXYg2zGAF4oT3lTuhofUA678jQt5+U9FlWA==}
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.2.69
+      '@use-gesture/react': 10.3.1(react@18.2.0)
+      '@visx/event': 3.3.0
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /@webassemblyjs/ast@1.12.1:

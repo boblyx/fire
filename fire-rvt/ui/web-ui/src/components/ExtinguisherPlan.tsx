@@ -7,9 +7,9 @@ interface CheckResultProps {
   id: string;
   room_name: string;
   room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
+  room_vertices: number[][];
+  extinguisher_vertices: number[][];
+  path_vertices: number[][];
   rating: number;
   result: string;
 }
@@ -19,9 +19,9 @@ interface InferResultProps {
   id: string;
   room_name: string;
   room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
+  room_vertices: number[][];
+  extinguisher_vertices: number[][];
+  path_vertices: number[][];
   rating: number;
   result: string;
 }
@@ -97,6 +97,8 @@ const ExtinguisherPlan = () => {
 
   const context = useContext(ResultContext);
 
+  let chkdata : any;
+
   const {
     checkResultData,
     setCheckResultData,
@@ -111,7 +113,6 @@ const ExtinguisherPlan = () => {
     currentFloor,
     setCurrentFloor
   } = context;
-
 
   /*
   // UseEffect method should checkResults get updated.
@@ -132,21 +133,59 @@ const ExtinguisherPlan = () => {
     setResults(inferResultList);
   }, []);
   */
-
+    
   useEffect(()=>{
-    console.log(currentRoom);
-  });
+    console.log(results);
+    let main_verts = currentRoom.vertices[0];
+    let obstacle_verts : number[][][][] = [];
+    if(currentRoom.vertices.length > 1){
+        obstacle_verts = currentRoom.vertices.slice(1);
+        // reverse the vertices to allow the 
+        // svg to create a cutout.
+        obstacle_verts.map((arr) => {arr.reverse();});
+    }
+    let room_array = [];
+    for(let i = 0; i < main_verts.length; i++){
+        let cvert : number[][] = main_verts[i];
+        room_array.push([cvert[0][0] * 100, cvert[0][1] * 100]);
+        if(i == main_verts.length - 1){
+            room_array.push([cvert[1][0] * 100, cvert[1][1] * 100]);
+        }
+    }
+    for(let i = 0; i < obstacle_verts.length; i++){
+        let cverts : number[][][] = obstacle_verts[i] ;
+        for (let n = 0; n < cverts.length; n++){
+            let cvert : number[][] = cverts[n]
+            room_array.push([cvert[0][0] * 100, cvert[0][1] * 100]);
+            if(n == cverts.length - 1){
+                room_array.push([cvert[1][0] * 100, cvert[1][0] * 100]);
+            }
+        }
+    }
+    console.log(room_array);
+    chkdata = {
+        "id": currentRoom.id,
+        "room_name": currentRoom.name,
+        "room_area": 0,
+        "room_vertices": room_array,
+        "extinguisher_vertices" : [],
+        "path_vertices": [],
+        "rating": 0,
+        "result": "NA"
+    }
+    setResults([chkdata]);
+  }, [currentRoom]);
 
   return (
-    <div
-      className="border border-primary/10 rounded-md flex justify-center items-center"
-      style={{ height: "calc(100vh - 180px)", overflow: "hidden" }}
-    >
+    <div className="border border-primary/10 rounded-md flex justify-center items-center"
+      style={{ height: "calc(100vh - 180px)", overflow: "hidden" }}>
+
       {results.length !== 0 ? (
         <PlanSVG resultData={results[0]} />
       ) : (
         <div className="text-2xl text-gray-200 font-bold"> Loading ...</div>
       )}
+
     </div>
   );
 };

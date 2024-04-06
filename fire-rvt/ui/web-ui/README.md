@@ -2,6 +2,12 @@
 
 UI for web application lauched from created Revit plugin. 
 
+## TODO
+- [x] Implement zoom.
+- [ ] Allow entire floor rooms to be visualized when floor is chosen.
+- [ ] Fix polygon preview by changing to SVG path.
+- [ ] Send payload to server.
+
 ## Installation
 
 In the project directory, run the following scripts:
