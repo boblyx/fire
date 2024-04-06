@@ -35,6 +35,7 @@ import {
 } from "../components/ui/form";
 
 import { SAMPLE_FLOORS } from "./samples/floor";
+import { CheckResultProps, InferResultProps } from "./Interfaces";
 
 
 interface RoomProps {
@@ -49,30 +50,6 @@ interface FloorProps {
   id: string;
   name: string;
   rooms : RoomProps[] | null; // TODO: change to RoomProps
-}
-
-// TODO: Props to be changed based on result output of AI model
-interface CheckResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-}
-
-// TODO: Props to be changed based on result output of AI model
-interface InferResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
 }
 
 // TODO: Props to be changed based on result output of AI model

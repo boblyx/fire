@@ -7,7 +7,7 @@ import React, {
 } from "react";
 
 // TODO: Props to be changed based on result output of AI model
-interface CheckResultProps {
+export interface CheckResultProps {
   id: string;
   room_name: string;
   room_area: number;
@@ -19,7 +19,7 @@ interface CheckResultProps {
 }
 
 // TODO: Props to be changed based on result output of AI model
-interface InferResultProps {
+export interface InferResultProps {
   id: string;
   room_name: string;
   room_area: number;
@@ -30,7 +30,7 @@ interface InferResultProps {
   result: string;
 }
 
-interface RoomProps {
+export interface RoomProps {
   id : string;
   name : string;
   level : string;
@@ -38,7 +38,7 @@ interface RoomProps {
   //extinguisher_vertices: [number, number][] | null;
 }
 
-interface FloorProps {
+export interface FloorProps {
   id: string;
   name: string;
   rooms : RoomProps[] | null; // TODO: change to RoomProps

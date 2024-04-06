@@ -3,30 +3,77 @@
  * Component for rendering floorplans as SVGs.
  */
 import { Zoom } from '@visx/zoom';
+import { FloorProps } from '@/contexts/ResultContext';
+import {roomToRoomObs} from './ExtinguisherPlan';
 
 interface ResultProps {
 id: string;
 room_name: string;
 room_area: number;
 room_vertices: number[][];
+obstacle_vertices : number[][][];
 extinguisher_vertices: number[][];
 path_vertices: number[][];
 rating: number;
 result: string;
+floor: FloorProps;
 }
 
 const width = 2400;
 const height = 2400;
+const initial_transform = {
+    scaleX : 0.08
+    ,scaleY : 0.08
+    ,translateX: 50
+    ,translateY: 1200
+    ,skewX: 0
+    ,skewY: 0
+}
+
+function vToPath(verts : number[][]){
+    let path_string = "";
+    for(let i = 0; i < verts.length; i++){
+        let cvert = verts[i];
+        let ostr = ""
+        if(i == 0){
+            ostr += "M "
+        }else{
+            ostr += "L "
+        }
+        ostr += `${cvert[0]} ${cvert[1]} `
+        path_string += ostr;
+    }
+    return path_string;
+}
+
+function roomToPath(room_verts : number[][], obs_verts: number[][][]){
+    let path_string = vToPath(room_verts);
+    for(let i = 0; i < obs_verts.length; i++){
+        path_string += vToPath(obs_verts[i]);
+    }
+    //console.log(path_string);
+    return path_string;
+}
+
+function floorToPath(floor : FloorProps){
+    let path_string = "";
+    if(floor.rooms === null){ return }
+    for (let i = 0; i < floor.rooms.length; i++){
+        let room = floor.rooms[i];
+        let rmobs = roomToRoomObs(room);
+        path_string += roomToPath(rmobs.room_array, rmobs.obs_array);
+    }
+    //console.log(path_string);
+    return path_string;
+}
 
 const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     let roomPoints = resultData.room_vertices
         .map((vertex) => vertex.join(","))
         .join(" ");
-    let pathPoints = resultData.path_vertices
-        .map((vertex) => vertex.join(","))
-        .join(" ");
+    let roomPath = roomToPath(resultData.room_vertices, resultData.obstacle_vertices);
+    let floorPath = floorToPath(resultData.floor);
 
-    let roomPoints2 = [];
     return (
             <div style={{width:"100%"}}>
             {!resultData || !resultData.room_vertices ? (
@@ -39,6 +86,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                         scaleXMax = {1}
                         scaleYMin = {1/20}
                         scaleYMax = {1}
+                        initialTransformMatrix = {initial_transform}
                         >
                         {(zoom)=>
                         <div className="relative">
@@ -46,12 +94,19 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                         style={{cursor : zoom.isDragging? 'grabbing' : 'grab', touchAction: 'none'}}
                         ref = {zoom.containerRef}>
                         <g transform = {zoom.toString()}>
-                            <polygon
+                            <path
                             id = "floor-plan"
-                            points={roomPoints}
+                            d = {floorPath}
+                            fill="lightgray"
+                            stroke="gray"
+                            strokeWidth="20"
+                            />
+                            <path
+                            id = "room-plan"
+                            d = {roomPath}
                             fill="lightblue"
                             stroke="blue"
-                            strokeWidth="2"
+                            strokeWidth="20"
                             />
                         </g>
                         <rect 

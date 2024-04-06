@@ -3,30 +3,7 @@ import axios from "axios";
 
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
-
-// TODO: Props to be changed based on result output of AI model
-interface CheckResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-}
-
-// TODO: Props to be changed based on result output of AI model
-interface InferResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-}
+import { InferResultProps, CheckResultProps } from "./Interfaces";
 
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
@@ -51,6 +28,7 @@ const checkResultList: CheckResultProps[] = [
       [0, 23000],
       [0, 0],
     ],
+    obstacle_vertices: [],
     extinguisher_vertices: [
       [500, 0],
       [8000, 3500],
@@ -63,7 +41,9 @@ const checkResultList: CheckResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
-  },
+    floor: {"id":"", "name":"", "rooms":[]}
+  }
+  ,
 ];
 
 // Dummy Infer Result Data
@@ -83,6 +63,7 @@ const inferResultList: InferResultProps[] = [
       [0, 23000],
       [0, 0],
     ],
+    obstacle_vertices: [],
     extinguisher_vertices: [
       [500, 0],
       [8000, 3500],
@@ -95,6 +76,7 @@ const inferResultList: InferResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
+    floor: {"id":"", "name":"", "rooms":[]}
   },
 ];
 

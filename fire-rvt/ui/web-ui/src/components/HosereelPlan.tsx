@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { ResultContext } from "../contexts/ResultContext";
+import { FloorProps, ResultContext } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
 
 // TODO: IN GENERAL, TO CHANGE THIS CODE SHOULD HOSEREEL COMPONENT BE DONE
@@ -9,10 +9,13 @@ interface CheckResultProps {
   room_name: string;
   room_area: number;
   room_vertices: [number, number][];
+  obstacle_vertices: number[][][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
   rating: number;
   result: string;
+  floor: FloorProps;
+
 }
 
 // TODO: Props to be changed based on result output of AI model
@@ -21,10 +24,12 @@ interface InferResultProps {
   room_name: string;
   room_area: number;
   room_vertices: [number, number][];
+  obstacle_vertices: number[][][];
   extinguisher_vertices: [number, number][];
   path_vertices: [number, number][];
   rating: number;
   result: string;
+  floor: FloorProps;
 }
 
 // Dummy Check Result Data
@@ -44,6 +49,7 @@ const checkResultList: CheckResultProps[] = [
       [0, 23000],
       [0, 0],
     ],
+    obstacle_vertices: [],
     extinguisher_vertices: [
       [500, 0],
       [8000, 3500],
@@ -56,6 +62,7 @@ const checkResultList: CheckResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
+    floor: {"id":"", "name": "", "rooms":[]}
   },
 ];
 
@@ -76,6 +83,7 @@ const inferResultList: InferResultProps[] = [
       [0, 23000],
       [0, 0],
     ],
+    obstacle_vertices: [],
     extinguisher_vertices: [
       [500, 0],
       [8000, 3500],
@@ -88,6 +96,7 @@ const inferResultList: InferResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
+    floor: {"id":"", "name": "", "rooms":[]}
   },
 ];
 
@@ -104,7 +113,7 @@ const HosereelPlan = () => {
     inferResultData,
     setInferResultData,
   } = context;
-
+  /*
   // UseEffect method should checkResults get updated.
   useEffect(() => {
     setResults(checkResultData);
@@ -121,7 +130,7 @@ const HosereelPlan = () => {
   }, []);
   useEffect(() => {
     setResults(inferResultList);
-  }, []);
+  }, []);*/
 
   return (
     <div
