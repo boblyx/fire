@@ -5,9 +5,9 @@ UI for web application lauched from created Revit plugin.
 ## TODO
 - [x] Update viewer when a new room is chosen.
 - [x] Implement zoom.
-- [ ] Change `SVGPolygon` to `SVGPath`
-- [ ] Allow entire floor rooms to be visualized when floor is chosen.
-- [ ] Fix polygon preview by changing to SVG path.
+- [x] Allow entire floor rooms to be visualized when floor is chosen.
+- [x] Fix polygon preview by changing to SVG path.
+- [ ] Reflect result properly in result panel.
 - [ ] Send payload to server.
 
 ## Installation
@@ -27,3 +27,6 @@ In the project directory, run the following scripts:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+## Contributors
+- Yuji Fujinami: UI / UX implementation
+- Bob YX Lee: Integration with Revit & API
