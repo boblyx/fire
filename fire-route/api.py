@@ -40,7 +40,7 @@ class Mesh(BaseModel):
                 "examples": 
                     [
                         {
-                            "faces": [0, 1, 2]
+                            "faces": [[0, 1, 2]]
                             ,"vertices": [[0,0], [1,1], [2, 0]]
 
                         }
@@ -66,11 +66,6 @@ async def travel(
     result = {"result": Compute.routeFromNavmesh(m, start, end)}
     return result
 
-if __name__ == "__main__":
-    print("fire-route API")
-    uvicorn.run("api:app", host=host, port = port, log_level="info", reload=True)
-    pass
-
 @app.post("/svg_path")
 async def svg_path(
         path : list[list[float]]
@@ -82,4 +77,7 @@ async def svg_path(
     """
     pass
 
-
+if __name__ == "__main__":
+    print("fire-route API")
+    uvicorn.run("api:app", host=host, port = port, log_level="info", reload=True)
+    pass

@@ -6,6 +6,8 @@ functions for generating and checking rooms
 TODO:
 - [ ] Add random obstacles
 """
+__author__ = "Bob YX Lee"
+
 from .Poly2D import rect2D, circle2D, getLines
 from .Bool2D import union
 from copy import deepcopy
@@ -26,10 +28,27 @@ class Room:
         self.anchors = []
         self.rects = []
         self.ext_slots = []
+        self.faces = []
         pass
 
     @staticmethod
+    def fromDict(room_dict : dict):
+        """ 
+        Generates a room object from 
+        a dictionary
+        """
+        room = Room()
+        for key, value in room_dict.items():
+            if not hasattr(room, key): continue
+            setattr(room, key, value)
+        return room
+
+    @staticmethod
     def random(iters = 1, div_len = 2000):
+        """
+        Generates a random room
+        TODO: Auto generate navmesh!
+        """
         cit = 0
         result = []
         anchors = []
@@ -96,13 +115,8 @@ class Room:
     def extTravelChk(self):
         """
         PASS 2: Check travel distance
+        !!TODO!!
         """
-        
         pass
-    pass
-def rRoom():
-    """
-    Generates a random room
-    """
-
+    
     pass
