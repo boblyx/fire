@@ -21,11 +21,11 @@ floor: FloorProps;
 
 const width = 2400;
 const height = 2400;
-const ext_rad = 100;
+const ext_rad = 300;
 
 const initial_transform = {
-    scaleX : 0.08
-    ,scaleY : 0.08
+    scaleX : 0.008
+    ,scaleY : 0.008
     ,translateX: 50
     ,translateY: 1200
     ,skewX: 0
@@ -42,7 +42,7 @@ function vToPath(verts : number[][]){
         }else{
             ostr += "L "
         }
-        ostr += `${cvert[0]} ${cvert[1]} `
+        ostr += `${cvert[0]} ${-cvert[1]} `
         path_string += ostr;
     }
     return path_string;
@@ -83,9 +83,9 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                         <Zoom<SVGSVGElement> 
                         width = {width} 
                         height = {height} 
-                        scaleXMin = {1/20} 
+                        scaleXMin = {1/200} 
                         scaleXMax = {1}
-                        scaleYMin = {1/20}
+                        scaleYMin = {1/200}
                         scaleYMax = {1}
                         initialTransformMatrix = {initial_transform}
                         >
@@ -100,7 +100,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             d = {floorPath}
                             fill="lightgray"
                             stroke="gray"
-                            strokeWidth="20"
+                            strokeWidth="100"
                             />
 
                             <path
@@ -108,14 +108,14 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             d = {roomPath}
                             fill="lightblue"
                             stroke="blue"
-                            strokeWidth="20"
+                            strokeWidth="100"
                             />
 
                            {exts.map((vertex, index) => (
                                <circle
                                key={index}
                                cx={vertex[0]}
-                               cy={vertex[1]}
+                               cy={-vertex[1]}
                                r={ext_rad}
                                fill="red"
                                />

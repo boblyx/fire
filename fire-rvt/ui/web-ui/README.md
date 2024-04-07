@@ -9,7 +9,8 @@ UI for web application lauched from created Revit plugin.
 - [x] Fix polygon preview by changing to SVG path.
 - [x] Reflect result properly in result panel.
 - [x] Render extinguisher placements
-- [ ] Send a payload to server.
+- [x] Send a payload to server.
+- [ ] Fix payload. For some reason doesn't work.
 - [ ] Render failure explanation (coverage diff) from server.
 - [ ] Render travel paths from server.
 

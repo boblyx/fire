@@ -37,7 +37,10 @@ import {
 import { SAMPLE_FLOORS } from "./samples/floor";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 import { RoomProps, FloorProps } from "../contexts/ResultContext";
+const ENDPOINTS = {
 
+    "/check/coverage": "http://localhost:41983/check/coverage"
+}
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
   setCheckResults: Dispatch<SetStateAction<CheckResultProps[]>>;
@@ -62,9 +65,11 @@ const SelectForm: React.FC<ResultProps> = ({
     setAllFloors,
     allRooms,
     setAllRooms,
+    currentRoom,
     setCurrentRoom,
     currentFloor,
-    setCurrentFloor
+    setCurrentFloor,
+    checkResultData
   } = context;
 
   const { toast } = useToast();
@@ -106,10 +111,54 @@ const SelectForm: React.FC<ResultProps> = ({
 
   // Handle form submit for check
   // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
+  /**
+   * TODO: Scale vertices if they are too small.
+   */
+  async function checkExtinguisherPlacement(){
+    console.log(checkResultData);
+    let cdata = checkResultData[0]
+    let vertices = cdata.room_vertices;
+    let obs_verts = cdata.obstacle_vertices;
+    for(let i = 0; i < obs_verts.length; i++){
+        let cob = obs_verts[i];
+        for(let n = 0; n < cob.length; i++){
+            vertices.push(cob[n]);
+        }
+    }
+    let payload = {
+        room_dict : {
+           vertices:  vertices,
+           faces: []
+        },
+        exts : cdata.extinguisher_vertices
+    }
+    console.log(payload);
+    console.log(JSON.stringify(payload));
+
+    try{
+    const response = await axios.post(
+      ENDPOINTS["/check/coverage"],
+      payload,
+    );
+    console.log(response);
+    toast({
+        variant: "success",
+        title: "Success!",
+        description: "Room data exported successfully.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "Failure to submit room data. Please try again.",
+    });
+   }
+  }
+
+  /*
   const checkExtinguisherPlacement = async (
     values: z.infer<typeof formSchema>,
   ) => {
-    /*
     try {
       // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
       const chosenRoom = allRooms.filter(
@@ -149,8 +198,8 @@ const SelectForm: React.FC<ResultProps> = ({
         title: "Error!",
         description: "Failure to submit room data. Please try again.",
       });
-      }*/
-  };
+      }
+  };*/
 
   // Handle form submit for inference
   // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
@@ -237,7 +286,6 @@ const SelectForm: React.FC<ResultProps> = ({
     setAllRooms(the_floor.rooms);
     // TODO change room placeholder to say: "Select Room"
     // when rooms are loaded
-    
   }
   /**
    * Triggers draw room routine.

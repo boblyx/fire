@@ -6,21 +6,16 @@ import { ResultContext, RoomProps } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 
-export let SCALE = 100
+export let SCALE = 1000
 
-function scaleCoords(coords : number[][], scale = SCALE, neg_y = true){
+function scaleCoords(coords : number[][], scale = SCALE){
     let o_coords : number[][] = []
     for(let i = 0; i < coords.length; i++){
         let ccrd : number[] = coords[i];
         let osb = []
         for(let n = 0; n < ccrd.length; n++){
             let cn = ccrd[n] as number;
-            if (neg_y == true && n == 1){
-                osb.push(-cn * scale)
-            }
-            else{
-                osb.push(cn * scale)
-            }
+            osb.push(cn * scale)
         }
         o_coords.push(osb);
     }
@@ -30,9 +25,9 @@ function linesToVerts(cverts : number[][][]){
     let oset : number[][] = []
     for (let n = 0; n < cverts.length; n++){
         let cvert : number[][] = cverts[n]
-        oset.push([cvert[0][0] * SCALE, -cvert[0][1] * SCALE]);
+        oset.push([cvert[0][0] * SCALE, cvert[0][1] * SCALE]);
         if(n == cverts.length - 1){
-            oset.push([cverts[0][0][0] * SCALE, -cverts[0][0][1] * SCALE]);
+            oset.push([cverts[0][0][0] * SCALE, cverts[0][0][1] * SCALE]);
         }
     }
     return oset

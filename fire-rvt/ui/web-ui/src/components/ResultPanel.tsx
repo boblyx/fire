@@ -1,3 +1,7 @@
+/**
+ * UI element for results panel where
+ * results of AI evaluation are shown.
+ */
 import React, { useState, useEffect, useContext} from "react";
 import axios from "axios";
 
@@ -13,75 +17,6 @@ interface ResultProps {
   inferResults: InferResultProps[];
 }
 
-// Dummy Check Result Data
-const checkResultList: CheckResultProps[] = [
-  {
-    id: "6754c9a9-9a41-4860-885d-c0500c4160c8",
-    room_name: "2F - Office",
-    room_area: 70,
-    room_vertices: [
-      [0, 0],
-      [8000, 0],
-      [8000, 5000],
-      [5000, 5000],
-      [5000, 19000],
-      [8000, 19000],
-      [8000, 23000],
-      [0, 23000],
-      [0, 0],
-    ],
-    obstacle_vertices: [],
-    extinguisher_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-    path_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-    rating: 70,
-    result: "PASS",
-    floor: {"id":"", "name":"", "rooms":[]}
-  }
-  ,
-];
-
-// Dummy Infer Result Data
-const inferResultList: InferResultProps[] = [
-  {
-    id: "6754c9a9-9a41-4860-885d-c0500c4160c8",
-    room_name: "2F - Office",
-    room_area: 70,
-    room_vertices: [
-      [0, 0],
-      [8000, 0],
-      [8000, 5000],
-      [5000, 5000],
-      [5000, 19000],
-      [8000, 19000],
-      [8000, 23000],
-      [0, 23000],
-      [0, 0],
-    ],
-    obstacle_vertices: [],
-    extinguisher_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-    path_vertices: [
-      [500, 0],
-      [8000, 3500],
-      [0, 19000],
-    ],
-    rating: 70,
-    result: "PASS",
-    floor: {"id":"", "name":"", "rooms":[]}
-  },
-];
-
 const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
   const [results, setResults] = useState<
     CheckResultProps[] | InferResultProps[]
@@ -94,17 +29,6 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
     checkResultData,
     currentRoom,
   } = context;
-  /*
-  // UseEffect method should checkResults get updated.
-  useEffect(() => {
-    setResults(checkResults);
-  }, [checkResults]);
-
-  // UseEffect method should checkResults get updated.
-  useEffect(() => {
-    setResults(inferResults);
-  }, [inferResults]);
-  */
 
   useEffect(()=>{
     console.log(checkResultData);

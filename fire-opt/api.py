@@ -56,7 +56,7 @@ COVERAGE ENDPOINTS
 @app.post("/check/coverage")
 async def check_coverage(
         room_dict : RoomModel
-        ,exts : list[list[int]] = [[0.5,0.5]]
+        ,exts : list[list[float]] = [[0.5,0.5]]
         ):
     """
     For a given room and extinguisher slots,
