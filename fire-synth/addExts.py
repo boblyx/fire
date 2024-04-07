@@ -15,19 +15,21 @@ sys.path.append("../fire-opt/packages")
 
 from geom.Room import Room
 
-d = {}
-divlen = 0.5
-with open("./dataset/real.json", "r") as f:
-    d = json.loads(f.read())
-
-outpath = os.path.join("./dataset", "EX_%s.json" % uuid4())
-
-for flr in d:
-    for rm in flr["rooms"]:
-        room = Room.fromLines(rm["vertices"])
-        room.gExtSlots(divlen)
-        exts = sample(room.ext_slots, randint(1,3))
-        rm["exts"] = exts
-    pass
-pprint(d[0]["rooms"][0])
+if __name__ == "__main__":
+    d = {}
+    divlen = 0.5
+    with open("./dataset/real.json", "r") as f:
+        d = json.loads(f.read())
+    outpath = os.path.join("./dataset", "EX_%s.json" % uuid4())
+    for flr in d:
+        for rm in flr["rooms"]:
+            room = Room.fromLines(rm["vertices"])
+            room.gExtSlots(divlen)
+            exts = sample(room.ext_slots, randint(1,3))
+            rm["exts"] = exts
+        pass
+    #pprint(d[0]["rooms"][0])
+    with open(outpath, "w") as f:
+        f.write(json.dumps(d, indent = 4))
+        print("Wrote to %s" % outpath)
 

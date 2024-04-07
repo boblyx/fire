@@ -8,7 +8,10 @@ UI for web application lauched from created Revit plugin.
 - [x] Allow entire floor rooms to be visualized when floor is chosen.
 - [x] Fix polygon preview by changing to SVG path.
 - [x] Reflect result properly in result panel.
-- [ ] Send payload to server.
+- [x] Render extinguisher placements
+- [ ] Send a payload to server.
+- [ ] Render failure explanation (coverage diff) from server.
+- [ ] Render travel paths from server.
 
 ## Installation
 
@@ -25,7 +28,9 @@ In the project directory, run the following scripts:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Open [http://localhost:3000/index.html](http://localhost:3000/index.html) to view it in the browser.
+
+The app has to be mounted on index.html route in order to work with Revit WebView2.
 
 ## Contributors
 - Yuji Fujinami: UI / UX implementation

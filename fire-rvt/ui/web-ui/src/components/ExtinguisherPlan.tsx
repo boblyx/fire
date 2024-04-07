@@ -6,13 +6,33 @@ import { ResultContext, RoomProps } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 
+export let SCALE = 100
+
+function scaleCoords(coords : number[][], scale = SCALE, neg_y = true){
+    let o_coords : number[][] = []
+    for(let i = 0; i < coords.length; i++){
+        let ccrd : number[] = coords[i];
+        let osb = []
+        for(let n = 0; n < ccrd.length; n++){
+            let cn = ccrd[n] as number;
+            if (neg_y == true && n == 1){
+                osb.push(-cn * scale)
+            }
+            else{
+                osb.push(cn * scale)
+            }
+        }
+        o_coords.push(osb);
+    }
+    return o_coords;
+}
 function linesToVerts(cverts : number[][][]){
     let oset : number[][] = []
     for (let n = 0; n < cverts.length; n++){
         let cvert : number[][] = cverts[n]
-        oset.push([cvert[0][0] * 100, -cvert[0][1] * 100]);
+        oset.push([cvert[0][0] * SCALE, -cvert[0][1] * SCALE]);
         if(n == cverts.length - 1){
-            oset.push([cverts[0][0][0] * 100, -cverts[0][0][1] * 100]);
+            oset.push([cverts[0][0][0] * SCALE, -cverts[0][0][1] * SCALE]);
         }
     }
     return oset
@@ -50,13 +70,14 @@ const ExtinguisherPlan = () => {
   } = context;
   useEffect(()=>{
     let {room_array, obs_array} = roomToRoomObs(currentRoom);
+    let ev = scaleCoords(currentRoom.extinguisher_vertices);
     chkdata = {
         "id": currentRoom.id,
         "room_name": currentRoom.name,
         "room_area": 0,
         "room_vertices": room_array,
         "obstacle_vertices": obs_array,
-        "extinguisher_vertices" : [],
+        "extinguisher_vertices" : ev,
         "path_vertices": [],
         "rating": 0,
         "result": "NA",

@@ -36,21 +36,7 @@ import {
 
 import { SAMPLE_FLOORS } from "./samples/floor";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
-
-
-interface RoomProps {
-  id : string;
-  name : string;
-  level : string;
-  vertices: number[][][][];
-  //extinguisher_vertices: [number, number][] | null;
-}
-
-interface FloorProps {
-  id: string;
-  name: string;
-  rooms : RoomProps[] | null; // TODO: change to RoomProps
-}
+import { RoomProps, FloorProps } from "../contexts/ResultContext";
 
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
@@ -70,23 +56,12 @@ const SelectForm: React.FC<ResultProps> = ({
   setCheckResults,
   setInferResults,
 }) => {
-  //const [allFloors, setAllFloors] = useState<FloorProps[]>([]);
-  //const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
-  //const [currentFloor, setCurrentFloor] = useState<FloorProps>();
-  //const [currentRoom, setCurrentRoom] = useState<RoomProps>();
-
   const context = useContext(ResultContext);
-
   const {
-    checkResultData,
-    setCheckResultData,
-    inferResultData,
-    setInferResultData,
     allFloors,
     setAllFloors,
     allRooms,
     setAllRooms,
-    currentRoom,
     setCurrentRoom,
     currentFloor,
     setCurrentFloor

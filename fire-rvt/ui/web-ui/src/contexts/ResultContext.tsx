@@ -12,7 +12,7 @@ export interface RoomProps {
   name : string;
   level : string;
   vertices: number[][][][];
-  //extinguisher_vertices: [number, number][] | null;
+  extinguisher_vertices: number[][];
 }
 
 export interface FloorProps {
@@ -53,7 +53,9 @@ export const ResultContext = createContext<ResultContextType>({
   allRooms : [],
   setAllRooms : () => {},
 
-  currentRoom : {"id":"", "name":"", "level":"", "vertices":[[[[0,0]]]]},
+  currentRoom : {"id":"", "name":"", 
+  "level":"", "vertices":[[[[0,0]]]],
+  "extinguisher_vertices": []},
   setCurrentRoom : () => {},
   currentFloor: {"id":"", "name":"", "rooms":[]},
   setCurrentFloor : () => {}
@@ -71,7 +73,8 @@ export const ResultContextProvider: React.FC<Props> = ({ children }) => {
   const [allRooms, setAllRooms] = useState<RoomProps[]>([]);
 
   const [currentRoom, setCurrentRoom] = useState<RoomProps>(
-    {"id":"", "name":"", "level":"", "vertices":[[[[0,0]]]]}
+    {"id":"", "name":"", "level":"", 
+    "vertices":[[[[0,0]]]], "extinguisher_vertices": []}
   );
   const [currentFloor, setCurrentFloor] = useState<FloorProps>(
     {"id":"", "name":"", "rooms":[]}

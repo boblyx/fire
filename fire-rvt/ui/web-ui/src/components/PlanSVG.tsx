@@ -21,6 +21,8 @@ floor: FloorProps;
 
 const width = 2400;
 const height = 2400;
+const ext_rad = 100;
+
 const initial_transform = {
     scaleX : 0.08
     ,scaleY : 0.08
@@ -71,6 +73,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     // Draw Extinguisher Circles
     let roomPath = roomToPath(resultData.room_vertices, resultData.obstacle_vertices);
     let floorPath = floorToPath(resultData.floor);
+    let exts = resultData.extinguisher_vertices;
 
     return (
             <div style={{width:"100%"}}>
@@ -107,6 +110,17 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             stroke="blue"
                             strokeWidth="20"
                             />
+
+                           {exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={vertex[1]}
+                               r={ext_rad}
+                               fill="red"
+                               />
+                           ))}
+                            
                         </g>
                         <rect 
                         width = {width} 

@@ -35,7 +35,6 @@ app.add_middleware(
 class RoomModel(BaseModel):
     faces: list[list[int]]
     vertices: list[list[float]]
-    ext_slots: list[list[float]]
     model_config = \
             {
             "json_schema_extra": {
@@ -44,8 +43,6 @@ class RoomModel(BaseModel):
                     {
                         "faces": [[0,1,2]]
                         ,"vertices": [[0,0], [1,1], [2,0]]
-                        ,"ext_slots": [[0.5,0.5]] 
-
                     }
                 ]
                 }
@@ -59,6 +56,7 @@ COVERAGE ENDPOINTS
 @app.post("/check/coverage")
 async def check_coverage(
         room_dict : RoomModel
+        ,exts : list[list[int]] = [[0.5,0.5]]
         ):
     """
     For a given room and extinguisher slots,
