@@ -44,6 +44,28 @@ class Room:
         return room
 
     @staticmethod
+    def fromLines(line_sets : list):
+        """
+        Generates a Room object from
+        a list of sets of lines
+        e.g. [ main, obs1, obs2 ...]
+        main => [line1, line2, ...]
+        line1 => [start, end]
+        start => [0,0,0]
+        """
+        vertices = []
+        for i, ls in enumerate(line_sets):
+            for n, l in enumerate(ls):
+                vertices.append(l[0])
+                if(n == len(ls) - 1):
+                    vertices.append(ls[0][0])
+                pass
+            pass
+        room = Room()
+        room.vertices = vertices
+        return room
+
+    @staticmethod
     def random(iters = 1, div_len = 2000):
         """
         Generates a random room
@@ -88,10 +110,10 @@ class Room:
         floor_mids = []
         for l in lines:
             if l.length < div_len:
-                floor_mids.append(l.mid)
+                floor_mids.append(l.mid.tolist())
                 continue
             divs = l.divideByLength(div_len)
-            floor_mids.extend([s.mid for s in divs])
+            floor_mids.extend([s.mid.tolist() for s in divs])
         self.ext_slots = floor_mids
 
     def extCoverChk(self, exts):

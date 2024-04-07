@@ -68,9 +68,7 @@ function floorToPath(floor : FloorProps){
 }
 
 const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
-    let roomPoints = resultData.room_vertices
-        .map((vertex) => vertex.join(","))
-        .join(" ");
+    // Draw Extinguisher Circles
     let roomPath = roomToPath(resultData.room_vertices, resultData.obstacle_vertices);
     let floorPath = floorToPath(resultData.floor);
 
@@ -101,6 +99,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             stroke="gray"
                             strokeWidth="20"
                             />
+
                             <path
                             id = "room-plan"
                             d = {roomPath}

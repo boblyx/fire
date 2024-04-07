@@ -4,6 +4,8 @@ coverage.py
 Synthetic dataset generator for coverage checks
 
 """
+__author__ = "Bob YX Lee"
+
 import sys
 import os
 import random
@@ -11,15 +13,12 @@ import pprint
 from copy import deepcopy
 from uuid import uuid4
 import json
-
-sys.path.append("../fire-opt/packages")
-
-from geom.Line2D import Line2D, drawPt
-from geom import Poly2D, Bool2D
-from geom.Room import Room
-
 from datetime import date
 from time import time
+
+sys.path.append("../fire-opt/packages")
+from geom.Room import Room
+
 import numpy as np
 import pyclipper
 

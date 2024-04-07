@@ -226,7 +226,6 @@ const SelectForm: React.FC<ResultProps> = ({
       */
   };
 
-
   /**
    * Updates the state of the Room collection
    * @author Bob YX Lee
@@ -284,7 +283,6 @@ const SelectForm: React.FC<ResultProps> = ({
     if(the_room == undefined){ return; }
     setCurrentRoom(the_room);
     document.dispatchEvent(new CustomEvent('show-plan'));
-    //document.dispatchEvent(new CustomEvent('draw-room', {"detail": the_room}));
     return;
   }
 
