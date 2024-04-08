@@ -10,10 +10,13 @@ using System.Linq;
 using System.Text.Json;
 /// <summary>
 /// For getting information from the Revit model
+/// TODO: 
+/// - Generate Navmeshes
+/// - Add extinguishers
 /// Author: Bob Lee
 /// </summary>
 namespace fire_rvt.api
-{
+{ 
     // FLOOR SCHEMA
     public class FloorInfo
     {
@@ -44,13 +47,19 @@ namespace fire_rvt.api
         public string name { get; set; }
         public string level { get; set; }
         public List<List<List<double[]>>> vertices { get; set; }
+        public List<double[]> extinguishers { get; set; }
+        public NavMesh navmesh { get; set; }
 
-        public RoomInfo(string id, string name, string level, List<List<List<double[]>>> vertices)
+        public RoomInfo(string id, string name,
+            string level, List<List<List<double[]>>> vertices, 
+            NavMesh navmesh, List<double[]> extinguishers)
         {
             this.id = id;
             this.name = name;
             this.level = level;
             this.vertices = vertices;
+            this.navmesh = navmesh;
+            this.extinguishers = extinguishers;
         }
     }
 
@@ -60,6 +69,17 @@ namespace fire_rvt.api
 
         public RoomList() {
             Rooms = new List<RoomInfo>();
+        }
+    }
+
+    public class NavMesh
+    {
+        public List<List<int>> faces { get; set; }
+        public double[] vertices { get; set; }
+
+        public NavMesh(double[] vertices, List<List<int>> faces) {
+            this.vertices = vertices;
+            this.faces = faces;
         }
     }
     // END ROOM SCHEMA
@@ -115,6 +135,32 @@ namespace fire_rvt.api
             return rmlist;
         }
 
+        public static NavMesh GetNavMesh(List<List<List<double[]>>>)
+        {
+            //Rhino.Geometry.Mesh mesh = new Rhino.Geometry.Mesh();
+            //Rhino.Geometry.Mesh.CreatePatch();
+            //Rhino.Geometry.Mesh.
+            //Rhino.Geometry.Brep.CreateTrimmedPlane()
+        }
+
+        /// <summary>
+        /// Example:
+        /// [
+        ///   [ // 0th is the main large boundary
+        ///     [
+        ///       [0,1], [1,2]
+        ///     ],
+        ///     [
+        ///     [1,2], [3,4]
+        ///     ]
+        ///   ],
+        ///   [ // 1 onwards are obstacles
+        ///       ....
+        ///   ]
+        /// ]
+        /// </summary>
+        /// <param name="rm"></param>
+        /// <returns></returns>
         public static List<List<List<double[]>>> GetRoomLines(Room rm)
         {
             IList<IList<BoundarySegment>> segments = rm.GetBoundarySegments(new SpatialElementBoundaryOptions());

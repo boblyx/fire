@@ -37,7 +37,7 @@ namespace fire_rvt
             public object payload;
         }
 
-        private async void OnWebViewInteraction(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        private void OnWebViewInteraction(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             WvReceiveAction result = null;
             try
