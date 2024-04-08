@@ -75,9 +75,9 @@ namespace fire_rvt.api
     public class NavMesh
     {
         public List<List<int>> faces { get; set; }
-        public double[] vertices { get; set; }
+        public List<double[]> vertices { get; set; }
 
-        public NavMesh(double[] vertices, List<List<int>> faces) {
+        public NavMesh(List<double[]> vertices, List<List<int>> faces) {
             this.vertices = vertices;
             this.faces = faces;
         }
@@ -127,22 +127,31 @@ namespace fire_rvt.api
                 string name = rm.Name;
                 string lvl = rm.Level.UniqueId;
                 List<List<List<double[]>>> verts = GetRoomLines(rm);
-                rmlist.Rooms.Add(new RoomInfo(id, name, lvl, verts));
+                rmlist.Rooms.Add(new RoomInfo(id, name, lvl, verts)); // TO UPDATE
             }
             //string jsonst = JsonSerializer.Serialize(rmlist);
             //Debug.WriteLine(jsonst);
             //return jsonst;
             return rmlist;
         }
-
-        public static NavMesh GetNavMesh(List<List<List<double[]>>>)
+        
+        // TODO
+        public static NavMesh GetNavMesh(Room room)
         {
-            //Rhino.Geometry.Mesh mesh = new Rhino.Geometry.Mesh();
-            //Rhino.Geometry.Mesh.CreatePatch();
-            //Rhino.Geometry.Mesh.
-            //Rhino.Geometry.Brep.CreateTrimmedPlane()
+            // Get .Geometry of the Room element
+            // Extract X,Y of each vertices and put them into a list, ignoring those with duplicate X, Y coords
+            // loop through face list and discard facelists for which indices cant be found in above list
+            GeometryElement rm_geom = room.get_Geometry(new Options());
+            List<NavMesh> meshes = new List<NavMesh> { };
+            foreach (var geom in rm_geom)
+            {
+                if (!Utilities.isSolid(geom)) { continue; }
+                meshes.Add(Utilities.toMesh(rm_geom));
+            }
+            //if (meshes.Count() == 0) { return NavMesh() };
+            return meshes[0];
         }
-
+        
         /// <summary>
         /// Example:
         /// [
