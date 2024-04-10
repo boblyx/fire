@@ -5,9 +5,7 @@ import { useState, useEffect, useContext } from "react";
 import { ResultContext, RoomProps } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
-
-export let SCALE = 1000
-
+import { SCALE } from "../contexts/Constants";
 function scaleCoords(coords : number[][], scale = SCALE){
     let o_coords : number[][] = []
     for(let i = 0; i < coords.length; i++){
@@ -59,6 +57,7 @@ const ExtinguisherPlan = () => {
   >([]);
   const context = useContext(ResultContext);
   const {
+    checkResultData,
     setCheckResultData,
     currentRoom,
     currentFloor,
@@ -76,11 +75,16 @@ const ExtinguisherPlan = () => {
         "path_vertices": [],
         "rating": 0,
         "result": "NA",
-        "floor": currentFloor
+        "floor": currentFloor,
+        "uncovered": []
     }
-    setResults([chkdata]);
     setCheckResultData([chkdata]);
   }, [currentRoom]);
+  
+  useEffect(() => {
+    console.log("Check Results!");
+    setResults(checkResultData);
+  }, [checkResultData]);
 
   return (
     <div className="border border-primary/10 rounded-md flex justify-center items-center"

@@ -5,6 +5,7 @@
 import { Zoom } from '@visx/zoom';
 import { FloorProps } from '@/contexts/ResultContext';
 import {roomToRoomObs} from './ExtinguisherPlan';
+import { SCALE } from '../contexts/Constants';
 
 interface ResultProps {
 id: string;
@@ -17,11 +18,13 @@ path_vertices: number[][];
 rating: number;
 result: string;
 floor: FloorProps;
+uncovered: number[][][];
 }
 
 const width = 2400;
 const height = 2400;
 const ext_rad = 300;
+const cover_rad = 15000;
 
 const initial_transform = {
     scaleX : 0.008
@@ -74,6 +77,12 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     let roomPath = roomToPath(resultData.room_vertices, resultData.obstacle_vertices);
     let floorPath = floorToPath(resultData.floor);
     let exts = resultData.extinguisher_vertices;
+    let diffs = resultData.uncovered;
+    let proc_diffs : any[] = [];
+    diffs.forEach( (diff) => {
+        let o : string = vToPath(diff);
+        proc_diffs.push(o);
+    })
 
     return (
             <div style={{width:"100%"}}>
@@ -102,7 +111,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             stroke="gray"
                             strokeWidth="100"
                             />
-
+                            {/* Room Layout*/}
                             <path
                             id = "room-plan"
                             d = {roomPath}
@@ -111,6 +120,20 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                             strokeWidth="100"
                             />
 
+                            {/* Extinguisher Coverage */}
+
+                           {exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={cover_rad}
+                               fill="yellow"
+                               fillOpacity={0.4}
+                               />
+                            ))}
+
+                            {/* Extinguisher Point */}
                            {exts.map((vertex, index) => (
                                <circle
                                key={index}
@@ -120,6 +143,17 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                fill="red"
                                />
                            ))}
+
+                           {/* Coverage Diffs */}
+                           {diffs.map((diff, index) => (
+                               <path
+                               key = {index}
+                               id = {`diff-${index}`}
+                               d = {vToPath(diff)}
+                               fill = "red"
+                               />
+                           ))
+                           }
                             
                         </g>
                         <rect 

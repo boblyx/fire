@@ -12,6 +12,7 @@ export interface CheckResultProps {
   rating: number;
   result: string;
   floor: FloorProps;
+  uncovered: number[][][];
 }
 
 // TODO: Props to be changed based on result output of AI model
@@ -26,4 +27,5 @@ export interface InferResultProps {
   rating: number;
   result: string;
   floor: FloorProps;
+  uncovered: number[][][];
 }

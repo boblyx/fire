@@ -1,36 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { FloorProps, ResultContext } from "../contexts/ResultContext";
 import PlanSVG from "./PlanSVG";
-
-// TODO: IN GENERAL, TO CHANGE THIS CODE SHOULD HOSEREEL COMPONENT BE DONE
-// TODO: Props to be changed based on result output of AI model
-interface CheckResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  obstacle_vertices: number[][][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-  floor: FloorProps;
-
-}
-
-// TODO: Props to be changed based on result output of AI model
-interface InferResultProps {
-  id: string;
-  room_name: string;
-  room_area: number;
-  room_vertices: [number, number][];
-  obstacle_vertices: number[][][];
-  extinguisher_vertices: [number, number][];
-  path_vertices: [number, number][];
-  rating: number;
-  result: string;
-  floor: FloorProps;
-}
+import { InferResultProps, CheckResultProps } from "./Interfaces";
 
 // Dummy Check Result Data
 const checkResultList: CheckResultProps[] = [
@@ -62,7 +33,8 @@ const checkResultList: CheckResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
-    floor: {"id":"", "name": "", "rooms":[]}
+    floor: {"id":"", "name": "", "rooms":[]},
+    uncovered: []
   },
 ];
 
@@ -96,7 +68,8 @@ const inferResultList: InferResultProps[] = [
     ],
     rating: 70,
     result: "PASS",
-    floor: {"id":"", "name": "", "rooms":[]}
+    floor: {"id":"", "name": "", "rooms":[]},
+    uncovered: []
   },
 ];
 

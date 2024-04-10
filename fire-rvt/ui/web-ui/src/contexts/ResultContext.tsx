@@ -13,6 +13,7 @@ export interface RoomProps {
   level : string;
   vertices: number[][][][];
   extinguisher_vertices: number[][];
+  refresh?: boolean;
 }
 
 export interface FloorProps {

@@ -69,7 +69,8 @@ const SelectForm: React.FC<ResultProps> = ({
     setCurrentRoom,
     currentFloor,
     setCurrentFloor,
-    checkResultData
+    checkResultData,
+    setCheckResultData
   } = context;
 
   const { toast } = useToast();
@@ -89,12 +90,6 @@ const SelectForm: React.FC<ResultProps> = ({
   // Reads user input for floor name field.
   const floorNameValue = watch("name");
 
-  // TODO: Stub function to do get request to Revit API to retrieve all relevant floor data. Change the API URL accordingly.
-  const getFloors = async (): Promise<FloorProps[]> => {
-    const response = await axios.get("https://your-api-endpoint.com/floors");
-    return response.data;
-  };
-
   // TODO: To amend this useEffect method once api endpoint is confirmed. useEffect only runs once on mount.
   useEffect(() => {
     /*
@@ -103,25 +98,21 @@ const SelectForm: React.FC<ResultProps> = ({
     setAllFloors(floorList);
   }, []);
 
-  // TODO: Stub function to do get request to Revit API to retrieve all relevant room data based on floor name input. Change the API URL accordingly.
-  // May not require getRoomBoundary stub function as would require another API request to Revit?
-  
   useEffect(() => {
   }, [floorNameValue]);
 
-  // Handle form submit for check
-  // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
   /**
    * TODO: Scale vertices if they are too small.
+   * @author Bob YX Lee
    */
   async function checkExtinguisherPlacement(){
-    console.log(checkResultData);
     let cdata = checkResultData[0]
     let vertices = cdata.room_vertices;
     let obs_verts = cdata.obstacle_vertices;
+
     for(let i = 0; i < obs_verts.length; i++){
         let cob = obs_verts[i];
-        for(let n = 0; n < cob.length; i++){
+        for(let n = 0; n < cob.length; n++){
             vertices.push(cob[n]);
         }
     }
@@ -132,7 +123,8 @@ const SelectForm: React.FC<ResultProps> = ({
         },
         exts : cdata.extinguisher_vertices
     }
-    console.log(payload);
+
+    // FOR DEBUG. DO NOT REMOVE
     console.log(JSON.stringify(payload));
 
     try{
@@ -140,12 +132,33 @@ const SelectForm: React.FC<ResultProps> = ({
       ENDPOINTS["/check/coverage"],
       payload,
     );
-    console.log(response);
+
+    let res : any = response.data
+
+    if(Object.keys(res).includes("error")){
+        console.log("Error occurred");
+        return;
+    }
+    
+    let new_chk : CheckResultProps = checkResultData[0];
+
+    if(res.result === true){
+        new_chk.result = "PASS";
+    }else{
+        new_chk.result = "FAIL";
+    }
+    new_chk.uncovered = res.diff;
+    console.log(res);
+    console.log(new_chk);
+    setCheckResultData([new_chk]);
+
+    // toast doesn't seem to work
     toast({
         variant: "success",
         title: "Success!",
         description: "Room data exported successfully.",
       });
+
     } catch (error) {
       toast({
         variant: "destructive",
