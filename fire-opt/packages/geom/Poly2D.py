@@ -89,6 +89,7 @@ def getLines(poly, closed = False):
     """
     lines = []
     for i, p in enumerate(poly):
+        if i == len(poly) - 1 : break
         pt = list(p)
         start = [pt[0], pt[1]]
         if closed == True and i == len(poly) - 1:

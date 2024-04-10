@@ -62,6 +62,9 @@ class Line2D:
             segs.append(Line2D(previous, p_t))
             previous = p_t
         return segs
+    
+    def to_np(self):
+        return np.array([self.p1, self.p2])
 
     def __str__(self):
         return "<Line: %s to %s>" % (str(self.p1), str(self.p2))
