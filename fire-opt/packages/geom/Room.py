@@ -10,8 +10,9 @@ __author__ = "Bob YX Lee"
 
 from .Poly2D import rect2D, circle2D, getLines
 from .Bool2D import union
-from copy import deepcopy
 
+from copy import deepcopy
+from pprint import pprint
 import random
 import pyclipper
 import numpy as np
@@ -40,6 +41,7 @@ class Room:
         room = Room()
         for key, value in room_dict.items():
             if not hasattr(room, key): continue
+            print(key)
             setattr(room, key, value)
         return room
 
@@ -121,11 +123,13 @@ class Room:
         PASS 1: Check coverage
         """
         pc = pyclipper.Pyclipper()
+        
         ext_circs = []
         for e in exts:
-            ext_circs.append(circle2D(15000, 64, e))
-        pc.AddPaths(ext_circs, pyclipper.PT_CLIP, True)
+            ext_circs.append(circle2D(15000, 32, e))
+        
         pc.AddPaths([self.vertices], pyclipper.PT_SUBJECT, True)
+        pc.AddPaths(ext_circs, pyclipper.PT_CLIP, pyclipper.PFT_POSITIVE)
         sln = pc.Execute(pyclipper.CT_DIFFERENCE, pyclipper.PFT_POSITIVE, pyclipper.PFT_POSITIVE)
         comply = False
         if len(sln) == 0:

@@ -9,6 +9,7 @@ import json
 import sys
 import os
 from uuid import uuid4
+from pprint import pprint
 
 import uvicorn
 from fastapi import FastAPI
@@ -63,9 +64,12 @@ async def check_coverage(
     compute whether pass 1 succeeds
     """
     room = Room.fromDict(room_dict.__dict__)
-    compliance = room.extCoverChk(room.ext_slots)
-    result = compliance
-    return result
+    try:
+        compliance = room.extCoverChk(exts)
+    except Exception as e:
+        result = {"error": "Error occured...!"}
+        return result
+    return compliance
 
 @app.post("/solve/coverage")
 async def solve_coverage():
