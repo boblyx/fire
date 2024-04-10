@@ -109,16 +109,18 @@ const SelectForm: React.FC<ResultProps> = ({
     let cdata = checkResultData[0]
     let vertices = cdata.room_vertices;
     let obs_verts = cdata.obstacle_vertices;
-
+    
+    /*
     for(let i = 0; i < obs_verts.length; i++){
         let cob = obs_verts[i];
         for(let n = 0; n < cob.length; n++){
             vertices.push(cob[n]);
         }
-    }
+    }*/
     let payload = {
         room_dict : {
            vertices:  vertices,
+           obstacles: obs_verts,
            faces: []
         },
         exts : cdata.extinguisher_vertices

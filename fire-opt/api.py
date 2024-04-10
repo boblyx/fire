@@ -36,6 +36,7 @@ app.add_middleware(
 class RoomModel(BaseModel):
     faces: list[list[int]]
     vertices: list[list[float]]
+    obstacles: list[list[list[float]]]
     model_config = \
             {
             "json_schema_extra": {
@@ -44,6 +45,9 @@ class RoomModel(BaseModel):
                     {
                         "faces": [[0,1,2]]
                         ,"vertices": [[0,0], [1,1], [2,0]]
+                        ,"obstacles":[
+                            [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
+                                     ]
                     }
                 ]
                 }
@@ -67,6 +71,7 @@ async def check_coverage(
     try:
         compliance = room.extCoverChk(exts)
     except Exception as e:
+        print(e);
         result = {"error": "Error occured...!"}
         return result
     return compliance

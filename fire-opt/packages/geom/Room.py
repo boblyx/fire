@@ -26,6 +26,7 @@ def randRect(widths = list(range(5000,10000)),
 class Room:
     def __init__(self):
         self.vertices = []
+        self.obstacles = []
         self.anchors = []
         self.rects = []
         self.ext_slots = []
