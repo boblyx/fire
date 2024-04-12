@@ -13,7 +13,6 @@ using Autodesk.Revit.UI.Selection;
 /// For showing the Web UI window.
 /// Author: Bob Lee
 /// </summary>
-
 namespace fire_rvt
 {
     [Transaction(TransactionMode.Manual)]
