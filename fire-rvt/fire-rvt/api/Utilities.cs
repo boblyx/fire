@@ -13,6 +13,18 @@ namespace fire_rvt.api
 {
     class Utilities
     {
+        public static ForgeTypeId mmTypeId = new ForgeTypeId("autodesk.unit.unit:millimeters-1.0.1");
+        public static ForgeTypeId sqmTypeId = new ForgeTypeId("autodesk.unit.unit:squareMeters-1.0.1");
+
+        public static double sqm(double value) {
+            return UnitUtils.ConvertFromInternalUnits(value, sqmTypeId);
+        }
+
+        public static double mm(double value) {
+            //ForgeTypeId mmTypeId = new ForgeTypeId("autodesk.unit.unit:millimeters-1.0.1");
+            return UnitUtils.ConvertFromInternalUnits(value, mmTypeId);
+        }
+
         /// <summary>
         /// QOL utility for checking if geometry is Solid.
         /// </summary>
@@ -155,7 +167,7 @@ namespace fire_rvt.api
                     List<XYZ> verts = new List<XYZ> { v1, v2, v3 };
                     foreach (XYZ vert in verts)
                     {
-                        double[] v = new double[] { vert.X, vert.Y };
+                        double[] v = new double[] { mm(vert.X), mm(vert.Y) };
                         bool has_dup = false;
                         foreach (double[] vi in vertices)
                         {
