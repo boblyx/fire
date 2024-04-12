@@ -68,7 +68,7 @@ const ExtinguisherPlan = () => {
     chkdata = {
         "id": currentRoom.id,
         "room_name": currentRoom.name,
-        "room_area": 0,
+        "room_area": Math.round(currentRoom.area ?? 0) * 100 / 100,
         "room_vertices": room_array,
         "obstacle_vertices": obs_array,
         "extinguisher_vertices" : ev,
