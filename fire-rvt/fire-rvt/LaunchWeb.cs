@@ -84,6 +84,7 @@ namespace fire_rvt
                                                         null, 404, "Not found", "");
                 }
             };
+            // .html needed because for some reason can't read from root url.
             web_view.CoreWebView2.Navigate(FAKE_URL+"index.html");
         }
     }

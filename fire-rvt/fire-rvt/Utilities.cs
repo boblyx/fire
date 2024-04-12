@@ -11,7 +11,6 @@ using System.Drawing.Imaging;
 /// Miscellaneous Functions
 /// Author: Bob Lee
 /// </summary>
-
 namespace fire_rvt
 {
     public class Utilities

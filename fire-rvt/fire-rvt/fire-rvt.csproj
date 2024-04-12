@@ -99,10 +99,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="api\Draw.cs" />
     <Compile Include="api\Info.cs" />
+    <Compile Include="api\Utilities.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Command.cs" />
     <Compile Include="LaunchWeb.cs" />
     <Compile Include="ManagedStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -143,7 +142,9 @@ SET pagepath=$(ProjectDir)\ui
 
 
 copy $(ProjectDir)$(OutputPath)\runtimes\win-x64\native\*.dll $(ProjectDir)$(OutputPath)
-
+rmdir $(ProjectDir)$(OutputPath)\runtimes /s /q
+rmdir $(ProjectDir)$(OutputPath)\Win32
+rmdir $(ProjectDir)$(OutputPath)\Win64
 
 if exist "$(AppData)\Autodesk\REVIT\Addins\2023" ^
 xcopy %25outpath%25 $(AppData)\Autodesk\REVIT\Addins\2023\fire-rvt /c /i /e /h /y

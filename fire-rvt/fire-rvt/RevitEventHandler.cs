@@ -6,7 +6,6 @@ using Autodesk.Revit.UI;
 /// For executing Revit Routines when called from Web UI
 /// Author: Bob Lee
 /// </summary>
-
 namespace fire_rvt
 {
     public class RevitEventHandler : IExternalEventHandler
