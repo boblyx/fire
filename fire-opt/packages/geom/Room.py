@@ -4,7 +4,7 @@ Room.py
 functions for generating and checking rooms
 
 TODO:
-- [ ] Add random obstacles
+- [ ] Add random obstacles for synth
 """
 __author__ = "Bob YX Lee"
 
@@ -17,6 +17,8 @@ import random
 import pyclipper
 import numpy as np
 import requests
+
+FIRE_ROUTE = "http://localhost:41982/travel"; # TODO: Transfer to .env
 
 def randRect(widths = list(range(5000,10000)),
              depths = list(range(5000,7000)),
@@ -142,18 +144,29 @@ class Room:
         return {"result": comply, "coverage": ext_circs ,"diff": sln}
 
     def closestPt(point, others):
+        """
+        Computes the point from a point cloud closest to
+        a test point.
+        """
         others = np.array(others)
         distances = np.linalg.norm(others - point, axis = 1)
         c_idx = np.argmin(distances)
         return others[c_idx]
 
     def furthestPt(point, others):
+        """
+        Computes the point from a point cloud furthest from
+        a test point.
+        """
         others = np.array(others)
         distances = np.linalg.norm(others - point, axis = 1)
         furthest_idx = np.argmax(distances)
         return others[furthest_idx]
 
     def closestOnLine(line, pt):
+        """
+        Computes point on line closest to a test point.
+        """
         pl = Polyline(2)
         pl.Add(line[0][0], line[0][1], 0)
         pl.Add(line[1][0], line[1][1], 0)
@@ -179,10 +192,34 @@ class Room:
                 candidates.append(closestOnLine(l.to_np(), fp))
             return furthestPt(fp, candidates)
 
+    def pathLength(path):
+        """
+        Measures travel path length
+        """
+        dist = 0
+        for i, l, in enumerate(path):
+            if i == len(path) - 1: continue
+            dist += distance2D(l, path[i+1])
+            pass
+        return dist
+
+    def getTravelPath2D(navmesh, start, end):
+        """
+        Get the travel path given a navmesh, start and end point
+        """
+        start = list(start[0:2]) # In case start & end are 3 dimensional
+        end = list(end[0:2])
+        payload = {"mesh": mesh, "start": start, "end": end}
+        res = requests.post(FIRE_ROUTE, json = payload);
+        travel = res.json()["result"]
+        distance = pathLength(travel);
+        return{"path": travel, "distance": distance };
+
     def extTravelChk(self, navmesh, exts):
         """
-        PASS 2: Check travel distance
-        !!TODO!!
+        PASS 2: Check travel distance from remote point
+        to each extinguisher. If one of the paths
+        is < 15m, it passes.
         """
         # Find remote point using exts 
         boundary2d = []
@@ -191,10 +228,16 @@ class Room:
 
         for o in self.obs:
             o.reverse()
-        all_bounds = boundary2d
         for o in self.obs: boundary2d += o;
+        blines = getLines(boundary2d)
         
-
-        pass
-    
+        # Most remote point out of all extinguishers
+        rp = most_remote(exts, boundary2d)
+        payload = {"paths": [], "result": "FAIL"}
+        for pt in exts:
+            path = getTravelPath2D(navmesh, pt, rp)
+            # If one of the paths are within 15m, it passes.
+            if(path["distance"] < 15000): payload["result"]  = "PASS"
+            payload["paths"].append(path)
+        return payload
     pass
