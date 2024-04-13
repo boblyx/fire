@@ -16,6 +16,7 @@ from pprint import pprint
 import random
 import pyclipper
 import numpy as np
+import requests
 
 def randRect(widths = list(range(5000,10000)),
              depths = list(range(5000,7000)),
@@ -31,6 +32,7 @@ class Room:
         self.rects = []
         self.ext_slots = []
         self.faces = []
+        self.navmesh = {}
         pass
 
     @staticmethod
@@ -139,11 +141,60 @@ class Room:
             comply = False
         return {"result": comply, "coverage": ext_circs ,"diff": sln}
 
-    def extTravelChk(self):
+    def closestPt(point, others):
+        others = np.array(others)
+        distances = np.linalg.norm(others - point, axis = 1)
+        c_idx = np.argmin(distances)
+        return others[c_idx]
+
+    def furthestPt(point, others):
+        others = np.array(others)
+        distances = np.linalg.norm(others - point, axis = 1)
+        furthest_idx = np.argmax(distances)
+        return others[furthest_idx]
+
+    def closestOnLine(line, pt):
+        pl = Polyline(2)
+        pl.Add(line[0][0], line[0][1], 0)
+        pl.Add(line[1][0], line[1][1], 0)
+        #print(dir(pl))
+        cp = pl.ClosesPoint(Point3d(pt[0], pt[1], 0))
+        return [cp.X, cp.Y]
+    
+    def most_remote(points = [], bounding = []):
+        """
+        TODO: Check if inside obstacle
+        Check if the point is inside any obstacles
+        If inside, find the point on the obstacle edges closest to the
+        current point
+        Then loop through all lines and get closest point on the line 
+        """
+        if len(points) == 1: 
+            return furthestPt(points[0], bounding);
+        else:
+            fp = np.mean(points, axis = 0)
+            candidates = []
+            blines = getLines(bounding)
+            for l in blines:
+                candidates.append(closestOnLine(l.to_np(), fp))
+            return furthestPt(fp, candidates)
+
+    def extTravelChk(self, navmesh, exts):
         """
         PASS 2: Check travel distance
         !!TODO!!
         """
+        # Find remote point using exts 
+        boundary2d = []
+        for b in self.vertices:
+            boundary2d.append(b[0], b[1])
+
+        for o in self.obs:
+            o.reverse()
+        all_bounds = boundary2d
+        for o in self.obs: boundary2d += o;
+        
+
         pass
     
     pass

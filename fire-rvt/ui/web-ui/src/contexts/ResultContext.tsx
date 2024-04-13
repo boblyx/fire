@@ -7,12 +7,17 @@ import React, {
 } from "react";
 
 import { CheckResultProps, InferResultProps } from "@/components/Interfaces";
+export interface NavMesh {
+    vertices : number[][];
+    faces: number[][];
+}
 export interface RoomProps {
   id : string;
   name : string;
   level : string;
   vertices: number[][][][];
   extinguisher_vertices: number[][];
+  navmesh: NavMesh;
   area? : number;
 }
 
@@ -56,7 +61,7 @@ export const ResultContext = createContext<ResultContextType>({
 
   currentRoom : {"id":"", "name":"", 
   "level":"", "vertices":[[[[0,0]]]],
-  "extinguisher_vertices": []},
+  "extinguisher_vertices": [], "navmesh": {"vertices":[], "faces":[]}},
   setCurrentRoom : () => {},
   currentFloor: {"id":"", "name":"", "rooms":[]},
   setCurrentFloor : () => {}
@@ -75,7 +80,7 @@ export const ResultContextProvider: React.FC<Props> = ({ children }) => {
 
   const [currentRoom, setCurrentRoom] = useState<RoomProps>(
     {"id":"", "name":"", "level":"", 
-    "vertices":[[[[0,0]]]], "extinguisher_vertices": []}
+    "vertices":[[[[0,0]]]], "extinguisher_vertices": [], "navmesh": {"vertices":[], "faces":[]}}
   );
   const [currentFloor, setCurrentFloor] = useState<FloorProps>(
     {"id":"", "name":"", "rooms":[]}

@@ -33,8 +33,24 @@ app.add_middleware(
         allow_headers = ["*"]
         )
 
+class NavMesh(BaseModel):
+    vertices: list[list[float]]
+    faces: list[list[float]]
+    model_config = \
+            {
+            "json_schema_extra": {
+                "examples":
+                [
+                    {
+                        "vertices": [[0,0], [1,1], [2,0]]
+                        ,"faces": [[0,1,2]]
+                    }
+                ]
+                }
+            }
+    pass
+
 class RoomModel(BaseModel):
-    faces: list[list[int]]
     vertices: list[list[float]]
     obstacles: list[list[list[float]]]
     model_config = \
@@ -43,8 +59,7 @@ class RoomModel(BaseModel):
                 "examples":
                 [
                     {
-                        "faces": [[0,1,2]]
-                        ,"vertices": [[0,0], [1,1], [2,0]]
+                        "vertices": [[0,0], [1,1], [2,0]]
                         ,"obstacles":[
                             [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
                                      ]
@@ -61,19 +76,23 @@ COVERAGE ENDPOINTS
 @app.post("/check/coverage")
 async def check_coverage(
         room_dict : RoomModel
-        ,exts : list[list[float]] = [[0.5,0.5]]
+        ,navmesh : NavMesh
+        ,exts : list[list[float]]
         ):
     """
     For a given room and extinguisher slots,
     compute whether pass 1 succeeds
     """
     room = Room.fromDict(room_dict.__dict__)
+    room.navmesh = navmesh
     try:
         compliance = room.extCoverChk(exts)
     except Exception as e:
         print(e);
         result = {"error": "Error occured...!"}
         return result
+
+    # Then check route
     return compliance
 
 @app.post("/solve/coverage")
@@ -94,10 +113,16 @@ async def infer_coverage():
 TRAVEL ENDPOINTS
 """
 @app.post("/check/travel")
-async def check_travel():
+async def check_travel(
+        room_dict : RoomModel
+        ,navmesh: NavMesh
+        ,exts: list[list[float]]
+        ):
     """For evaluation of travel distance.
     STUB
     """
+    room = Room.fromDict(room_dict.__dict__)
+    room.navmesh = navmesh;
     return {}
 
 @app.post("/solve/travel")

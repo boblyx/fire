@@ -34,7 +34,7 @@ import {
   FormMessage,
 } from "../components/ui/form";
 
-import { SAMPLE_FLOORS } from "./samples/floor";
+import { SAMPLE_FLOORS } from "./samples/floor_exts";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 import { RoomProps, FloorProps } from "../contexts/ResultContext";
 const ENDPOINTS = {
@@ -109,20 +109,14 @@ const SelectForm: React.FC<ResultProps> = ({
     let cdata = checkResultData[0]
     let vertices = cdata.room_vertices;
     let obs_verts = cdata.obstacle_vertices;
+    let navmesh = currentRoom.navmesh;
     
-    /*
-    for(let i = 0; i < obs_verts.length; i++){
-        let cob = obs_verts[i];
-        for(let n = 0; n < cob.length; n++){
-            vertices.push(cob[n]);
-        }
-    }*/
     let payload = {
         room_dict : {
            vertices:  vertices,
            obstacles: obs_verts,
-           faces: []
         },
+        navmesh: navmesh,
         exts : cdata.extinguisher_vertices
     }
 
@@ -264,20 +258,6 @@ const SelectForm: React.FC<ResultProps> = ({
       }
       */
   };
-
-  /**
-   * Updates the state of the Room collection
-   * @author Bob YX Lee
-   */
-  function updateRooms(e : any = {}){
-    console.log("Updating Floors!");
-    console.log(e);
-    let floors = e.detail?.Floors;
-    if(floors == null) { return };
-    document.dispatchEvent(new CustomEvent('setAllFloors', {
-      "detail": floors
-    }));
-  }
 
   /**
    * Triggers population of rooms dropdown to get Room info.
