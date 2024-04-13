@@ -1,1 +1,1 @@
-export let SCALE = 1000
+export let SCALE = 1;
