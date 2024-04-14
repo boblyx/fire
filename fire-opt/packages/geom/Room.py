@@ -175,18 +175,22 @@ class Room:
             payload["paths"].append(path)
         return payload
 
-    def extSolve(self, navmesh, exslt, picked_exts = []):
+    def extSolve(self, navmesh, exslt, picked_exts = [], skip_travel = True):
         """
         Rule based method to propose extinguishers
         :param navmesh: Navmesh for wayfinding
         :param exslt: Extinguisher slots where extinguishers can be placed. Typically on walls.
         :param picked_exts:  List of any previously picked extinguishers
+        :param skip_travel: Skip travel check adjustment. In case compute takes too long.
         """
         rm = self
         count = 0
+        max_count = 20
         cover_pass = False
         cdiffs = []
         while cover_pass == False:
+            if count == max_count: break;
+            print("\t extSolve: Iteration %d" % count)
             #if count == max_count : break # DEBUG
             # If we already have exts, check them first
             if(count == 0 and len(picked_exts) > 0):
@@ -217,10 +221,12 @@ class Room:
         # Now coverage is settled, we have to check the travel distance
         # From most remote. If distance > 15000, just put it at the
         # extslt closest to the remote point!
-        tres = rm.extTravelChk(navmesh, picked_exts)
-        #drawPathPlines(d3, tres)
-        if not (tres["result"] == "PASS"):
-            picked_exts.append(tres["remote"])
+        # FIXME: Doesn't work for some room layouts.
+        if not skip_travel:
+            tres = rm.extTravelChk(navmesh, picked_exts)
+            ##drawPathPlines(d3, tres)
+            if not (tres["result"] == "PASS"):
+                picked_exts.append(tres["remote"])
         return [list(p) for p in picked_exts]
     pass
 pass

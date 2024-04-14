@@ -8,6 +8,7 @@ export interface CheckResultProps {
   room_vertices: number[][];
   obstacle_vertices : number[][][];
   extinguisher_vertices: number[][];
+  suggested_exts: number[][];
   paths: TravelPath[];
   rating: number;
   result: string;
@@ -23,6 +24,7 @@ export interface InferResultProps {
   room_vertices: number[][];
   obstacle_vertices: number[][][];
   extinguisher_vertices: number[][];
+  suggested_exts: number[][];
   paths: TravelPath[];
   rating: number;
   result: string;
@@ -37,6 +39,7 @@ export interface ResultProps {
     room_vertices: number[][];
     obstacle_vertices : number[][][];
     extinguisher_vertices: number[][];
+    suggested_exts: number[][];
     paths: TravelPath[];
     rating: number;
     result: string;

@@ -80,6 +80,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     let travelPaths = travelToPaths(resultData.paths);
     console.log(travelPaths);
     let exts = resultData.extinguisher_vertices;
+    let sg_exts = resultData.suggested_exts;
     let diffs = resultData.uncovered;
     let proc_diffs : any[] = [];
     diffs.forEach( (diff) => {
@@ -136,7 +137,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                />
                             ))}
 
-                            {/* Extinguisher Point */}
+                            {/* Extinguisher Points */}
                            {exts.map((vertex, index) => (
                                <circle
                                key={index}
@@ -144,6 +145,29 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                cy={-vertex[1]}
                                r={ext_rad}
                                fill="red"
+                               />
+                           ))}
+
+                            {/* Suggested Extinguisher Points */}
+                           {sg_exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={ext_rad}
+                               fill="magenta"
+                               />
+                           ))}
+
+                            {/* Suggested Extinguisher Coverage */}
+                           {sg_exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={cover_rad}
+                               fill="gold"
+                               fillOpacity={0.4}
                                />
                            ))}
 

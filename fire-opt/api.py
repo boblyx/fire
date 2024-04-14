@@ -84,6 +84,21 @@ class SlotResolution(BaseModel):
             }
     pass
 
+class SolveOptions(BaseModel):
+    skip_travel: bool
+    model_config = \
+            {
+            "json_schema_extra": {
+                    "examples":
+                    [
+                        {
+                            "skip_travel": True
+                        }
+                    ]
+                }
+            }
+    pass
+
 """
 SOLVER
 """
@@ -93,6 +108,7 @@ async def ext_solve_all(
         ,navmesh : NavMesh = {"vertices": [[0,0], [1,1], [2,0]],"faces": [[0,1,2]]}
         ,exts : list[list[float]] = [[0,0]]
         ,resolution : SlotResolution = {"units": 1000}
+        ,solve_options : SolveOptions = {"skip_travel": True}
         ):
     """
     Use rule based solver to propose extinguisher locations.
@@ -101,7 +117,7 @@ async def ext_solve_all(
     res = {"exts": []}
     exslt = rm.gExtSlots(resolution.__dict__["units"])
     try:
-        res["exts"] = rm.extSolve(navmesh.__dict__, exslt, exts)
+        res["exts"] = rm.extSolve(navmesh.__dict__, exslt, exts, solve_options["skip_travel"])
     except Exception as e:
         print(e)
         result = {"error": "Error occured...!"}
