@@ -4,6 +4,7 @@ Convenience functions for paths.
 """
 import numpy as np
 import drawsvg as dw
+import requests
 
 from .Line2D import distance2D
 
@@ -44,7 +45,7 @@ def getTravelPath2D(navmesh, start, end):
     """
     start = list(start[0:2]) # In case start & end are 3 dimensional
     end = list(end[0:2])
-    payload = {"mesh": mesh, "start": start, "end": end}
+    payload = {"mesh": navmesh, "start": start, "end": end}
     res = requests.post(FIRE_ROUTE, json = payload);
     travel = res.json()["result"]
     distance = pathLength(travel);

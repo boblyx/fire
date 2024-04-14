@@ -6,6 +6,7 @@ __author__ = "Bob YX Lee"
 
 import numpy as np
 import drawsvg as dw
+from rhino3dm import Polyline, Point3d
 
 def drawPt(drawing, pt, SCALE = 100):
     drawing.append(dw.Circle(pt[0]/SCALE, -pt[1]/SCALE, 5, fill='blue'))
@@ -26,7 +27,9 @@ def closestOnLine(line, pt):
     pl = Polyline(2)
     pl.Add(line[0][0], line[0][1], 0)
     pl.Add(line[1][0], line[1][1], 0)
-    #print(dir(pl))
+    # Note that rhino3dm typo here is the actual function name
+    # from the rhino3dm pypi package.
+    # In future, may need to edit this fn name.
     cp = pl.ClosesPoint(Point3d(pt[0], pt[1], 0))
     return [cp.X, cp.Y]
 

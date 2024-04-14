@@ -6,6 +6,15 @@ For operations regarding multiple points
 __author__ = "Bob YX Lee"
 
 import numpy as np
+from .Poly2D import getLines
+from .Line2D import closestOnLine
+
+def centroid(points):
+    """
+    Computes centroid of a list of points.
+    """
+    pc = np.array(points)
+    return np.mean(points, axis = 0).tolist()
 
 def closestPt(point, others):
     """

@@ -8,15 +8,16 @@ TODO:
 """
 __author__ = "Bob YX Lee"
 
-from .Poly2D import rect2D, circle2D, getLines
-from .Bool2D import union
-from .PointCloud import most_remote
-from .Path2D import getTravelPath2D
-from .Line2D import slotsFromLines
-
 from copy import deepcopy
 from pprint import pprint
 import random
+
+from .Poly2D import rect2D, circle2D, getLines
+from .Bool2D import union
+from .PointCloud import most_remote, centroid, closestPt
+from .Path2D import getTravelPath2D
+from .Line2D import slotsFromLines
+
 import pyclipper
 import numpy as np
 import requests
@@ -156,21 +157,70 @@ class Room:
         # Find remote point using exts 
         boundary2d = []
         for b in self.vertices:
-            boundary2d.append(b[0], b[1])
+            boundary2d.append([b[0], b[1]])
 
-        for o in self.obs:
+        for o in self.obstacles:
             o.reverse()
-        for o in self.obs: boundary2d += o;
+
+        for o in self.obstacles: boundary2d += o;
         blines = getLines(boundary2d)
         
         # Most remote point out of all extinguishers
         rp = most_remote(exts, boundary2d)
-        payload = {"paths": [], "result": "FAIL"}
+        payload = {"paths": [], "result": "FAIL", "remote": rp}
         for pt in exts:
             path = getTravelPath2D(navmesh, pt, rp)
             # If one of the paths are within 15m, it passes.
             if(path["distance"] < 15000): payload["result"]  = "PASS"
             payload["paths"].append(path)
         return payload
+
+    def extSolve(self, navmesh, exslt, picked_exts = []):
+        """
+        Rule based method to propose extinguishers
+        :param navmesh: Navmesh for wayfinding
+        :param exslt: Extinguisher slots where extinguishers can be placed. Typically on walls.
+        :param picked_exts:  List of any previously picked extinguishers
+        """
+        rm = self
+        count = 0
+        cover_pass = False
+        cdiffs = []
+        while cover_pass == False:
+            #if count == max_count : break # DEBUG
+            # If we already have exts, check them first
+            if(count == 0 and len(picked_exts) > 0):
+                res = rm.extCoverChk(picked_exts)
+                cdiffs.extend(res["diff"])
+                cover_pass = res["result"]
+                #drawCoverResults(d3, picked_exts, res)
+                count += 1
+                continue
+            # Otherwise, if its 1st loop, pick a random
+            # extslot to place an extinguisher
+            if(count == 0):
+                pidx = random.randint(0, len(exslt) -1)
+                cext = exslt.pop(pidx)
+            else:
+                # If not first loop, there's already a coverage shortfall. 
+                # Pick a random shortfall zone and get its centroid
+                c = centroid(random.choice(cdiffs))
+                # Then find the extslot closest to the centroid.
+                cext = closestPt(c, exslt)
+            picked_exts.append(cext)
+            res = rm.extCoverChk(picked_exts)
+            #drawPt(d3,cext)
+            #drawCoverDiff(d3, res["coverage"], res["diff"])
+            cdiffs.extend(res["diff"])
+            cover_pass = res["result"]
+            count += 1 
+        # Now coverage is settled, we have to check the travel distance
+        # From most remote. If distance > 15000, just put it at the
+        # extslt closest to the remote point!
+        tres = rm.extTravelChk(navmesh, picked_exts)
+        #drawPathPlines(d3, tres)
+        if not (tres["result"] == "PASS"):
+            picked_exts.append(tres["remote"])
+        return [p.tolist() for p in picked_exts]
     pass
 pass
