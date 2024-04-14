@@ -40,12 +40,12 @@ class NavMesh(BaseModel):
             {
             "json_schema_extra": {
                 "examples":
-                [
-                    {
-                        "vertices": [[0,0], [1,1], [2,0]]
-                        ,"faces": [[0,1,2]]
-                    }
-                ]
+                    [
+                        {
+                            "vertices": [[0,0], [1,1], [2,0]]
+                            ,"faces": [[0,1,2]]
+                        }
+                    ]
                 }
             }
     pass
@@ -57,22 +57,60 @@ class RoomModel(BaseModel):
             {
             "json_schema_extra": {
                 "examples":
-                [
-                    {
-                        "vertices": [[0,0], [1,1], [2,0]]
-                        ,"obstacles":[
-                            [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
-                                     ]
-                    }
-                ]
+                    [
+                        {
+                            "vertices": [[0,0], [1,1], [2,0]]
+                            ,"obstacles":[
+                                [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
+                                         ]
+                        }
+                    ]
+                }
+            }
+    pass
+
+class SlotResolution(BaseModel):
+    units: int
+    model_config = \
+            {
+            "json_schema_extra": {
+                    "examples":
+                    [
+                        {
+                            "units": 1000
+                        }
+                    ]
                 }
             }
     pass
 
 """
+SOLVER
+"""
+@app.post("/ext_solve_all")
+async def ext_solve_all(
+        room_dict : RoomModel = {"vertices": [[0,0], [1,1], [2,0]], "obstacles": []}
+        ,navmesh : NavMesh = {"vertices": [[0,0], [1,1], [2,0]],"faces": [[0,1,2]]}
+        ,exts : list[list[float]] = [[0,0]]
+        ,resolution : SlotResolution = {"units": 1000}
+        ):
+    """
+    Use rule based solver to propose extinguisher locations.
+    """
+    rm = Room.fromDict(room_dict.__dict__)
+    res = {"exts": []}
+    exslt = rm.gExtSlots(resolution.__dict__["units"])
+    try:
+        res["exts"] = rm.extSolve(navmesh.__dict__, exslt, exts)
+    except Exception as e:
+        print(e)
+        result = {"error": "Error occured...!"}
+        return result
+    return res
+
+"""
 COVERAGE ENDPOINTS
 """
-
 @app.post("/check/coverage")
 async def check_coverage(
         room_dict : RoomModel
@@ -86,17 +124,26 @@ async def check_coverage(
     room = Room.fromDict(room_dict.__dict__)
     room.navmesh = navmesh
     try:
-        compliance = room.extCoverChk(exts)
+        cover_compliance = room.extCoverChk(exts)
+        travel_compliance = room.extTravelChk(navmesh, exts)
     except Exception as e:
         print(e);
         result = {"error": "Error occured...!"}
         return result
-    
+    res = {"cover": cover_compliance, 
+           "travel": travel_compliance,
+           "comply": False}
+    if(travel_compliance["result"] == "PASS" and cover_compliance["result"] == True):
+        res["comply"] = False
     # Then check route
-    return compliance
+    return res
 
 @app.post("/solve/coverage")
-async def solve_coverage():
+async def solve_coverage(
+        room_dict : RoomModel
+        ,navmesh : NavMesh
+        ,exts : list[list[float]]
+        ):
     """For rule based solving.
     STUB
     """

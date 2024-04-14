@@ -221,6 +221,6 @@ class Room:
         #drawPathPlines(d3, tres)
         if not (tres["result"] == "PASS"):
             picked_exts.append(tres["remote"])
-        return [p.tolist() for p in picked_exts]
+        return [list(p) for p in picked_exts]
     pass
 pass
