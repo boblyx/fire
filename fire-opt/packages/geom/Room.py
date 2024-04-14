@@ -109,19 +109,33 @@ class Room:
         room.rects = rects
         return room
 
+    @staticmethod 
+    def slotsFromLines(lines, div_len=1000):
+        slots = []
+        for l in lines:
+            if l.length < div_len:
+                slots.append(l.mid)
+                continue
+            divs = l.divideByLength(div_len)
+            slots.extend([s.mid for s in divs])
+        return slots
+
     def gExtSlots(self, div_len = 1000):
         """
         Generate places where extinguishers may be placed.
+        TODO: add for obstacles
         """
-        lines = getLines(self.vertices, True)
-        floor_mids = []
-        for l in lines:
-            if l.length < div_len:
-                floor_mids.append(l.mid.tolist())
-                continue
-            divs = l.divideByLength(div_len)
-            floor_mids.extend([s.mid.tolist() for s in divs])
-        self.ext_slots = floor_mids
+        blines = getLines(self.vertices, True)
+        olines = []
+        for o in self.obstacles:
+            olines.extend(getLines(o, True))
+        slots = []
+
+        slots.extend(self.slotsFromLines(blines))
+        slots.extend(self.slotsFromLines(olines))
+
+        self.ext_slots = slots
+        return self.ext_slots
 
     def extCoverChk(self, exts):
         """
