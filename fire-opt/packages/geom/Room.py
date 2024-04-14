@@ -10,6 +10,9 @@ __author__ = "Bob YX Lee"
 
 from .Poly2D import rect2D, circle2D, getLines
 from .Bool2D import union
+from .PointCloud import most_remote
+from .Path2D import getTravelPath2D
+from .Line2D import slotsFromLines
 
 from copy import deepcopy
 from pprint import pprint
@@ -109,17 +112,6 @@ class Room:
         room.rects = rects
         return room
 
-    @staticmethod 
-    def slotsFromLines(lines, div_len=1000):
-        slots = []
-        for l in lines:
-            if l.length < div_len:
-                slots.append(l.mid)
-                continue
-            divs = l.divideByLength(div_len)
-            slots.extend([s.mid for s in divs])
-        return slots
-
     def gExtSlots(self, div_len = 1000):
         """
         Generate places where extinguishers may be placed.
@@ -131,8 +123,8 @@ class Room:
             olines.extend(getLines(o, True))
         slots = []
 
-        slots.extend(self.slotsFromLines(blines))
-        slots.extend(self.slotsFromLines(olines))
+        slots.extend(slotsFromLines(blines))
+        slots.extend(slotsFromLines(olines))
 
         self.ext_slots = slots
         return self.ext_slots
@@ -153,82 +145,8 @@ class Room:
         comply = False
         if len(sln) == 0:
             comply = True
-        else:
-            comply = False
         return {"result": comply, "coverage": ext_circs ,"diff": sln}
-
-    def closestPt(point, others):
-        """
-        Computes the point from a point cloud closest to
-        a test point.
-        """
-        others = np.array(others)
-        distances = np.linalg.norm(others - point, axis = 1)
-        c_idx = np.argmin(distances)
-        return others[c_idx]
-
-    def furthestPt(point, others):
-        """
-        Computes the point from a point cloud furthest from
-        a test point.
-        """
-        others = np.array(others)
-        distances = np.linalg.norm(others - point, axis = 1)
-        furthest_idx = np.argmax(distances)
-        return others[furthest_idx]
-
-    def closestOnLine(line, pt):
-        """
-        Computes point on line closest to a test point.
-        """
-        pl = Polyline(2)
-        pl.Add(line[0][0], line[0][1], 0)
-        pl.Add(line[1][0], line[1][1], 0)
-        #print(dir(pl))
-        cp = pl.ClosesPoint(Point3d(pt[0], pt[1], 0))
-        return [cp.X, cp.Y]
     
-    def most_remote(points = [], bounding = []):
-        """
-        TODO: Check if inside obstacle
-        Check if the point is inside any obstacles
-        If inside, find the point on the obstacle edges closest to the
-        current point
-        Then loop through all lines and get closest point on the line 
-        """
-        if len(points) == 1: 
-            return furthestPt(points[0], bounding);
-        else:
-            fp = np.mean(points, axis = 0)
-            candidates = []
-            blines = getLines(bounding)
-            for l in blines:
-                candidates.append(closestOnLine(l.to_np(), fp))
-            return furthestPt(fp, candidates)
-
-    def pathLength(path):
-        """
-        Measures travel path length
-        """
-        dist = 0
-        for i, l, in enumerate(path):
-            if i == len(path) - 1: continue
-            dist += distance2D(l, path[i+1])
-            pass
-        return dist
-
-    def getTravelPath2D(navmesh, start, end):
-        """
-        Get the travel path given a navmesh, start and end point
-        """
-        start = list(start[0:2]) # In case start & end are 3 dimensional
-        end = list(end[0:2])
-        payload = {"mesh": mesh, "start": start, "end": end}
-        res = requests.post(FIRE_ROUTE, json = payload);
-        travel = res.json()["result"]
-        distance = pathLength(travel);
-        return{"path": travel, "distance": distance };
-
     def extTravelChk(self, navmesh, exts):
         """
         PASS 2: Check travel distance from remote point
@@ -255,3 +173,4 @@ class Room:
             payload["paths"].append(path)
         return payload
     pass
+pass

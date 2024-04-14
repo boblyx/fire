@@ -1,13 +1,18 @@
 """
-Math2D.py
+Path2D.py
 Convenience functions for paths.
 """
 import numpy as np
 import drawsvg as dw
 
+from .Line2D import distance2D
+
 FIRE_ROUTE = "http://localhost:41982/travel"
 
 def pathLength(path):
+    """
+    Measures travel path length
+    """
     dist = 0
     for i, l, in enumerate(path):
         if i == len(path) - 1: continue
@@ -32,3 +37,15 @@ def drawTravel(drawing, start, end, SCALE = 100, stroke = "blue", failstroke = "
         pass
     drawing.append(tpath)
     return pathLength(travel)
+
+def getTravelPath2D(navmesh, start, end):
+    """
+    Get the travel path given a navmesh, start and end point
+    """
+    start = list(start[0:2]) # In case start & end are 3 dimensional
+    end = list(end[0:2])
+    payload = {"mesh": mesh, "start": start, "end": end}
+    res = requests.post(FIRE_ROUTE, json = payload);
+    travel = res.json()["result"]
+    distance = pathLength(travel);
+    return{"path": travel, "distance": distance };
