@@ -138,16 +138,16 @@ const SelectForm: React.FC<ResultProps> = ({
     
     let new_chk : CheckResultProps = checkResultData[0];
 
-    if(res.result === true){
+    if(res.comply === true){
         new_chk.result = "PASS";
     }else{
         new_chk.result = "FAIL";
     }
-    new_chk.uncovered = res.diff;
+    
+    new_chk.uncovered = res.cover.diff;
+    new_chk.paths = res.travel.paths;
     console.log(res);
-    console.log(new_chk);
     setCheckResultData([new_chk]);
-
     // toast doesn't seem to work
     toast({
         variant: "success",

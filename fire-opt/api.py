@@ -122,10 +122,9 @@ async def check_coverage(
     compute whether pass 1 succeeds
     """
     room = Room.fromDict(room_dict.__dict__)
-    room.navmesh = navmesh
     try:
         cover_compliance = room.extCoverChk(exts)
-        travel_compliance = room.extTravelChk(navmesh, exts)
+        travel_compliance = room.extTravelChk({"vertices": navmesh.vertices, "faces": navmesh.faces}, exts)
     except Exception as e:
         print(e);
         result = {"error": "Error occured...!"}
@@ -133,8 +132,11 @@ async def check_coverage(
     res = {"cover": cover_compliance, 
            "travel": travel_compliance,
            "comply": False}
+    print(res)
+    print("\t1.Coverage Compliance %s" % str(cover_compliance["result"]))
+    print("\t2.Travel Compliance %s" % travel_compliance["result"])
     if(travel_compliance["result"] == "PASS" and cover_compliance["result"] == True):
-        res["comply"] = False
+        res["comply"] = True
     # Then check route
     return res
 

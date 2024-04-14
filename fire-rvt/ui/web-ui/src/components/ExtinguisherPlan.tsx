@@ -72,7 +72,7 @@ const ExtinguisherPlan = () => {
         "room_vertices": room_array,
         "obstacle_vertices": obs_array,
         "extinguisher_vertices" : ev,
-        "path_vertices": [],
+        "paths": [],
         "rating": 0,
         "result": "NA",
         "floor": currentFloor,

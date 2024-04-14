@@ -167,7 +167,7 @@ class Room:
         
         # Most remote point out of all extinguishers
         rp = most_remote(exts, boundary2d)
-        payload = {"paths": [], "result": "FAIL", "remote": rp}
+        payload = {"paths": [], "result": "FAIL", "remote": list(rp)}
         for pt in exts:
             path = getTravelPath2D(navmesh, pt, rp)
             # If one of the paths are within 15m, it passes.
