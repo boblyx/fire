@@ -148,6 +148,19 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                />
                            ))}
 
+
+                            {/* Suggested Extinguisher Coverage */}
+                           {sg_exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={cover_rad}
+                               fill="gold"
+                               fillOpacity={0.25}
+                               />
+                           ))}
+
                             {/* Suggested Extinguisher Points */}
                            {sg_exts.map((vertex, index) => (
                                <circle
@@ -159,17 +172,6 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                />
                            ))}
 
-                            {/* Suggested Extinguisher Coverage */}
-                           {sg_exts.map((vertex, index) => (
-                               <circle
-                               key={index}
-                               cx={vertex[0]}
-                               cy={-vertex[1]}
-                               r={cover_rad}
-                               fill="gold"
-                               fillOpacity={0.4}
-                               />
-                           ))}
 
                            {/* Coverage Diffs */}
                            {diffs.map((diff, index) => (
