@@ -168,6 +168,20 @@ namespace fire_rvt.api
             return rmlist;
         }
 
+        public static List<FamilySymbol> getExtinguisherSymbols(UIApplication app) {
+            var doc = app.ActiveUIDocument.Document;
+            List<FamilySymbol> outlist = new List<FamilySymbol>();
+            FilteredElementCollector fc = new FilteredElementCollector(doc);//.OfClass(typeof(FamilySymbol));
+            fc.OfCategory(BuiltInCategory.OST_FireAlarmDevices);
+            fc.OfClass(typeof(FamilySymbol));
+            foreach (FamilySymbol fs in fc)
+            {
+                if (!(fs.FamilyName.ToUpper().Contains("EXTINGUISHER"))) { continue;  }
+                outlist.Add(fs);
+            }
+            return outlist;
+        }
+
         /// <summary>
         /// Gets extinguishers inside a room.
         /// </summary>
@@ -178,7 +192,9 @@ namespace fire_rvt.api
         {
             List<double[]> coords = new List<double[]> { };
             var doc = app.ActiveUIDocument.Document;
-            FilteredElementCollector excollect = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance));
+            FilteredElementCollector excollect = new FilteredElementCollector(doc);//.OfClass(typeof(FamilyInstance));
+            excollect.OfCategory(BuiltInCategory.OST_FireAlarmDevices);
+            excollect.OfClass(typeof(FamilyInstance));
             foreach (FamilyInstance fitem in excollect)
             {
                 ElementId typeId = fitem.GetTypeId();

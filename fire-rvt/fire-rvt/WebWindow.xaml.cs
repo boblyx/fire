@@ -6,6 +6,7 @@ using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 /// <summary>
 /// For Interop between Web UI and Revit
@@ -20,6 +21,9 @@ namespace fire_rvt
         public UIApplication uiApp;
         public bool isLoaded = false;
         public WebView2 web_view;
+        public List<double[]> exts_to_place;
+        public string level_id;
+        public string room_id;
 
         public WebWindow(UIApplication app)
         {
@@ -65,8 +69,20 @@ namespace fire_rvt
                     break;
 
                 case "placeExtinguishers":
-                    // TODO
                     Debug.WriteLine("Placing Extinguishers!");
+                    Debug.WriteLine(result.payload);
+                    // FIXME: To get current room level!
+                    Debug.WriteLine((result.payload).GetType());
+                    Newtonsoft.Json.Linq.JObject extdata = result.payload as Newtonsoft.Json.Linq.JObject;
+                    Debug.WriteLine("Handling!");
+                    Newtonsoft.Json.Linq.JToken level = extdata["level"];
+                    Newtonsoft.Json.Linq.JToken room = extdata["room"];
+                    Newtonsoft.Json.Linq.JArray exts = extdata["extinguishers"] as Newtonsoft.Json.Linq.JArray;
+                    List<double[]> extinguishers = exts.ToObject<List<double[]>>();
+                    room_id = room.ToObject<string>();
+                    level_id = level.ToObject<string>();
+                    exts_to_place = extinguishers;
+                    App.rvtHandler.Raise(RevitEventHandler.RevitActionsEnum.PlaceExtinguishers);
                     break;
 
                 default:
