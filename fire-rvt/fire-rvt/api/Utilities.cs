@@ -1,11 +1,10 @@
 ﻿using System;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Architecture;
-using Autodesk.Revit.UI.Selection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Autodesk.Revit.DB.Structure;
 /// <summary>
 /// Author: Bob YX Lee
 /// </summary>
@@ -202,6 +201,31 @@ namespace fire_rvt.api
                 }
             }
             return new NavMesh(vertices, ifaces);
+        }
+
+        public static void PlaceExtinguishers(UIApplication app, WebWindow webWindow)
+        {
+
+            List<FamilySymbol> extFams = api.Info.getExtinguisherSymbols(app);
+            FamilySymbol extFam = extFams[0];
+            var doc = app.ActiveUIDocument.Document;
+            Debug.WriteLine(extFam.FamilyName);
+            Debug.WriteLine(extFam.UniqueId);
+            Level level = doc.GetElement(webWindow.level_id) as Level;
+            double height = level.Elevation;
+            foreach (double[] loc in webWindow.exts_to_place)
+            {
+                XYZ pos = new XYZ(loc[0], loc[1], height);
+                Debug.WriteLine(pos);
+                try
+                {
+                    doc.Create.NewFamilyInstance(pos, extFam, StructuralType.NonStructural);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+            }
         }
     }
 }
