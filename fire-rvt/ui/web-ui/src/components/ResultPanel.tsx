@@ -83,13 +83,18 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
             </div>
           </div>
           <div className="flex justify-between">
-            <div className="font-bold">No. of Extinguishers:</div>
+            <div className="font-bold" style={{color:"red"}}>No. 🧯:</div>
             <div>{results[0].extinguisher_vertices.length}</div>
           </div>
           <div className="flex justify-between">
+            <div className="font-bold" style={{color:"magenta"}}>No. Suggested 🧯+ :</div>
+            <div>{results[0].suggested_exts.length}</div>
+          </div>
+          {/*
+          <div className="flex justify-between">
             <div className="font-bold">Rating:</div>
             <div>{results[0].rating}</div>
-          </div>
+          </div>*/}
           <div className="flex justify-between">
             <div className="font-bold">Compliance:</div>
             <div className="border px-2 rounded-md bg-green-400 font-bold">
@@ -103,7 +108,7 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
                 exportExtinguisherPlacement();
               }}
             >
-              Export
+              Export to Revit
             </Button>
           </div>
         </div>

@@ -10,6 +10,7 @@ import drawsvg as dw
 from .Line2D import Line2D
 from copy import deepcopy
 
+
 def drawCoverage(drawing, pt, SCALE = 100):
     """
     Draws circle coverage of an extinguisher.

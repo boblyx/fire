@@ -33,35 +33,105 @@ app.add_middleware(
         allow_headers = ["*"]
         )
 
+class NavMesh(BaseModel):
+    vertices: list[list[float]]
+    faces: list[list[float]]
+    model_config = \
+            {
+            "json_schema_extra": {
+                "examples":
+                    [
+                        {
+                            "vertices": [[0,0], [1,1], [2,0]]
+                            ,"faces": [[0,1,2]]
+                        }
+                    ]
+                }
+            }
+    pass
+
 class RoomModel(BaseModel):
-    faces: list[list[int]]
     vertices: list[list[float]]
     obstacles: list[list[list[float]]]
     model_config = \
             {
             "json_schema_extra": {
                 "examples":
-                [
-                    {
-                        "faces": [[0,1,2]]
-                        ,"vertices": [[0,0], [1,1], [2,0]]
-                        ,"obstacles":[
-                            [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
-                                     ]
-                    }
-                ]
+                    [
+                        {
+                            "vertices": [[0,0], [1,1], [2,0]]
+                            ,"obstacles":[
+                                [[0.1,0.1],[0.1,0.2],[0.2,0.2]]
+                                         ]
+                        }
+                    ]
+                }
+            }
+    pass
+
+class SlotResolution(BaseModel):
+    units: int
+    model_config = \
+            {
+            "json_schema_extra": {
+                    "examples":
+                    [
+                        {
+                            "units": 1000
+                        }
+                    ]
+                }
+            }
+    pass
+
+class SolveOptions(BaseModel):
+    skip_travel: bool
+    model_config = \
+            {
+            "json_schema_extra": {
+                    "examples":
+                    [
+                        {
+                            "skip_travel": True
+                        }
+                    ]
                 }
             }
     pass
 
 """
+SOLVER
+"""
+@app.post("/ext_solve_all")
+async def ext_solve_all(
+        room_dict : RoomModel = {"vertices": [[0,0], [1,1], [2,0]], "obstacles": []}
+        ,navmesh : NavMesh = {"vertices": [[0,0], [1,1], [2,0]],"faces": [[0,1,2]]}
+        ,exts : list[list[float]] = [[0,0]]
+        ,resolution : SlotResolution = {"units": 1000}
+        ,solve_options : SolveOptions = {"skip_travel": True}
+        ):
+    """
+    Use rule based solver to propose extinguisher locations.
+    """
+    rm = Room.fromDict(room_dict.__dict__)
+    res = {"exts": []}
+    exslt = rm.gExtSlots(resolution.__dict__["units"])
+    try:
+        res["exts"] = rm.extSolve(navmesh.__dict__, exslt, exts, solve_options["skip_travel"])
+    except Exception as e:
+        print(e)
+        result = {"error": "Error occured...!"}
+        return result
+    return res
+
+"""
 COVERAGE ENDPOINTS
 """
-
 @app.post("/check/coverage")
 async def check_coverage(
         room_dict : RoomModel
-        ,exts : list[list[float]] = [[0.5,0.5]]
+        ,navmesh : NavMesh
+        ,exts : list[list[float]]
         ):
     """
     For a given room and extinguisher slots,
@@ -69,15 +139,29 @@ async def check_coverage(
     """
     room = Room.fromDict(room_dict.__dict__)
     try:
-        compliance = room.extCoverChk(exts)
+        cover_compliance = room.extCoverChk(exts)
+        travel_compliance = room.extTravelChk({"vertices": navmesh.vertices, "faces": navmesh.faces}, exts)
     except Exception as e:
         print(e);
         result = {"error": "Error occured...!"}
         return result
-    return compliance
+    res = {"cover": cover_compliance, 
+           "travel": travel_compliance,
+           "comply": False}
+    print(res)
+    print("\t1.Coverage Compliance %s" % str(cover_compliance["result"]))
+    print("\t2.Travel Compliance %s" % travel_compliance["result"])
+    if(travel_compliance["result"] == "PASS" and cover_compliance["result"] == True):
+        res["comply"] = True
+    # Then check route
+    return res
 
 @app.post("/solve/coverage")
-async def solve_coverage():
+async def solve_coverage(
+        room_dict : RoomModel
+        ,navmesh : NavMesh
+        ,exts : list[list[float]]
+        ):
     """For rule based solving.
     STUB
     """
@@ -94,10 +178,16 @@ async def infer_coverage():
 TRAVEL ENDPOINTS
 """
 @app.post("/check/travel")
-async def check_travel():
+async def check_travel(
+        room_dict : RoomModel
+        ,navmesh: NavMesh
+        ,exts: list[list[float]]
+        ):
     """For evaluation of travel distance.
     STUB
     """
+    room = Room.fromDict(room_dict.__dict__)
+    room.navmesh = navmesh;
     return {}
 
 @app.post("/solve/travel")

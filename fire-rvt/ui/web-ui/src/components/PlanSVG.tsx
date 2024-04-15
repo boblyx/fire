@@ -6,20 +6,7 @@ import { Zoom } from '@visx/zoom';
 import { FloorProps } from '@/contexts/ResultContext';
 import {roomToRoomObs} from './ExtinguisherPlan';
 import { SCALE } from '../contexts/Constants';
-
-interface ResultProps {
-id: string;
-room_name: string;
-room_area: number;
-room_vertices: number[][];
-obstacle_vertices : number[][][];
-extinguisher_vertices: number[][];
-path_vertices: number[][];
-rating: number;
-result: string;
-floor: FloorProps;
-uncovered: number[][][];
-}
+import { ResultProps, TravelPath } from './Interfaces';
 
 const width = 2400;
 const height = 2400;
@@ -51,6 +38,20 @@ function vToPath(verts : number[][]){
     return path_string;
 }
 
+const FAIL_COLOR = "#FFCC00"
+const PASS_COLOR = "#0000FF" // Blue
+
+function travelToPaths(tpaths : TravelPath[]){
+    let pdlist : any = []
+    tpaths.forEach((path : TravelPath) => {
+        let path_data : any = {"pathstr": "", "stroke": FAIL_COLOR};
+        if(path.distance <= 15000){ path_data["stroke"] = PASS_COLOR }
+        path_data["pathstr"] = vToPath(path.path);
+        pdlist.push(path_data);
+    });
+    return pdlist;
+}
+
 function roomToPath(room_verts : number[][], obs_verts: number[][][]){
     let path_string = vToPath(room_verts);
     for(let i = 0; i < obs_verts.length; i++){
@@ -76,7 +77,10 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
     // Draw Extinguisher Circles
     let roomPath = roomToPath(resultData.room_vertices, resultData.obstacle_vertices);
     let floorPath = floorToPath(resultData.floor);
+    let travelPaths = travelToPaths(resultData.paths);
+    console.log(travelPaths);
     let exts = resultData.extinguisher_vertices;
+    let sg_exts = resultData.suggested_exts;
     let diffs = resultData.uncovered;
     let proc_diffs : any[] = [];
     diffs.forEach( (diff) => {
@@ -133,7 +137,7 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                />
                             ))}
 
-                            {/* Extinguisher Point */}
+                            {/* Extinguisher Points */}
                            {exts.map((vertex, index) => (
                                <circle
                                key={index}
@@ -144,6 +148,31 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                />
                            ))}
 
+
+                            {/* Suggested Extinguisher Coverage */}
+                           {sg_exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={cover_rad}
+                               fill="gold"
+                               fillOpacity={0.25}
+                               />
+                           ))}
+
+                            {/* Suggested Extinguisher Points */}
+                           {sg_exts.map((vertex, index) => (
+                               <circle
+                               key={index}
+                               cx={vertex[0]}
+                               cy={-vertex[1]}
+                               r={ext_rad}
+                               fill="magenta"
+                               />
+                           ))}
+
+
                            {/* Coverage Diffs */}
                            {diffs.map((diff, index) => (
                                <path
@@ -151,9 +180,22 @@ const PlanSVG = ({ resultData }: { resultData: ResultProps }) => {
                                id = {`diff-${index}`}
                                d = {vToPath(diff)}
                                fill = "red"
+                               fillOpacity = {0.5}
                                />
                            ))
                            }
+
+                           {/* Travel Paths*/}
+                           {travelPaths.map((tdata : any, index : number) => (
+                               <path
+                               key = {index}
+                               id = {`tp-${index}`}
+                               d = {tdata.pathstr}
+                               fill = "none"
+                               stroke = {tdata.stroke}
+                               strokeWidth = {200}
+                               />
+                           ))}
                             
                         </g>
                         <rect 

@@ -4,6 +4,7 @@ import PlanSVG from "./PlanSVG";
 import { InferResultProps, CheckResultProps } from "./Interfaces";
 
 // Dummy Check Result Data
+/*
 const checkResultList: CheckResultProps[] = [
   {
     id: "6754c9a9-9a41-4860-885d-c0500c4160c8",
@@ -26,11 +27,11 @@ const checkResultList: CheckResultProps[] = [
       [8000, 3500],
       [0, 19000],
     ],
-    path_vertices: [
+    paths: [[
       [500, 0],
       [8000, 3500],
       [0, 19000],
-    ],
+    ]],
     rating: 70,
     result: "PASS",
     floor: {"id":"", "name": "", "rooms":[]},
@@ -61,18 +62,18 @@ const inferResultList: InferResultProps[] = [
       [8000, 3500],
       [0, 19000],
     ],
-    path_vertices: [
+    paths: [[
       [500, 0],
       [8000, 3500],
       [0, 19000],
-    ],
+    ]],
     rating: 70,
     result: "PASS",
     floor: {"id":"", "name": "", "rooms":[]},
     uncovered: []
   },
 ];
-
+*/
 const HosereelPlan = () => {
   const [results, setResults] = useState<
     CheckResultProps[] | InferResultProps[]

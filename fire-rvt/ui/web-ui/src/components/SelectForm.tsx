@@ -34,12 +34,13 @@ import {
   FormMessage,
 } from "../components/ui/form";
 
-import { SAMPLE_FLOORS } from "./samples/floor";
+import { SAMPLE_FLOORS } from "./samples/floor_exts";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 import { RoomProps, FloorProps } from "../contexts/ResultContext";
 const ENDPOINTS = {
 
     "/check/coverage": "http://localhost:41983/check/coverage"
+    ,"/ext_solve_all": "http://localhost:41983/ext_solve_all"
 }
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
@@ -109,20 +110,14 @@ const SelectForm: React.FC<ResultProps> = ({
     let cdata = checkResultData[0]
     let vertices = cdata.room_vertices;
     let obs_verts = cdata.obstacle_vertices;
+    let navmesh = currentRoom.navmesh;
     
-    /*
-    for(let i = 0; i < obs_verts.length; i++){
-        let cob = obs_verts[i];
-        for(let n = 0; n < cob.length; n++){
-            vertices.push(cob[n]);
-        }
-    }*/
     let payload = {
         room_dict : {
            vertices:  vertices,
            obstacles: obs_verts,
-           faces: []
         },
+        navmesh: navmesh,
         exts : cdata.extinguisher_vertices
     }
 
@@ -144,17 +139,17 @@ const SelectForm: React.FC<ResultProps> = ({
     
     let new_chk : CheckResultProps = checkResultData[0];
 
-    if(res.result === true){
+    if(res.comply === true){
         new_chk.result = "PASS";
     }else{
         new_chk.result = "FAIL";
     }
-    new_chk.uncovered = res.diff;
+    
+    new_chk.uncovered = res.cover.diff;
+    new_chk.paths = res.travel.paths;
     console.log(res);
-    console.log(new_chk);
     setCheckResultData([new_chk]);
-
-    // toast doesn't seem to work
+    // FIXME: toast doesn't seem to work
     toast({
         variant: "success",
         title: "Success!",
@@ -170,114 +165,67 @@ const SelectForm: React.FC<ResultProps> = ({
    }
   }
 
-  /*
-  const checkExtinguisherPlacement = async (
-    values: z.infer<typeof formSchema>,
-  ) => {
-    try {
-      // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
-      const chosenRoom = allRooms.filter(
-        (room) => room.room_name === values.room_name,
-      )[0];
-      // TODO: To remove
-      console.log({
-        ...values,
-        room_area: chosenRoom.room_area,
-        room_vertices: chosenRoom.room_vertices,
-        extinguisher_vertices: chosenRoom.extinguisher_vertices,
-      });
-      // TODO: To confirm
-      const payload = {
-        ...values,
-        room_area: chosenRoom.room_area,
-        room_vertices: chosenRoom.room_vertices,
-        extinguisher_vertices: chosenRoom.extinguisher_vertices,
-      };
-      // TODO: To replace with actual API endpoint
-      const response = await axios.post(
-        "https://your-api-endpoint.com/checkExtinguisher",
-        payload,
-      );
-      // Pass the states upwards and through context
-      setCheckResults(response.data);
-      // Context passed to Extinguisher and Hosereel Plans
-      setCheckResultData(response.data);
-      toast({
-        variant: "success",
-        title: "Success!",
-        description: "Room data exported successfully.",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error!",
-        description: "Failure to submit room data. Please try again.",
-      });
-      }
-  };*/
+  function vequals(v1 : number[], v2 : number[]){
+    for(let i = 0; i < v1.length; i++){
+        if(v1[i] !== v2[i]){ return false}
+    }
+    return true;
+  }
 
   // Handle form submit for inference
   // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
   const inferExtinguisherPlacement = async (
     values: z.infer<typeof formSchema>,
   ) => {
-    /*
-    try {
-      // Add room and extinguisher vertice attributes here. Maybe there is a better way of doing this.
-      const chosenRoom = allRooms.filter(
-        (room) => room.room_name === values.room_name,
-      )[0];
-      // TODO: To remove
-      console.log({
-        ...values,
-        room_area: chosenRoom.room_area,
-        room_vertices: chosenRoom.room_vertices,
-        extinguisher_vertices: chosenRoom.extinguisher_vertices,
-      });
-      // TODO: To confirm
-      const payload = {
-        ...values,
-        room_area: chosenRoom.room_area,
-        room_vertices: chosenRoom.room_vertices,
-        extinguisher_vertices: chosenRoom.extinguisher_vertices,
-      };
-      // TODO: To replace with actual API endpoint
-      const response = await axios.post(
-        "https://your-api-endpoint.com/checkExtinguisher",
-        payload,
-      );
-      // Pass the states upwards and through context
-      setInferResults(response.data);
-      // Context passed to Extinguisher and Hosereel Plans
-      setInferResultData(response.data);
-      toast({
-        variant: "success",
-        title: "Success!",
-        description: "Room data exported successfully.",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error!",
-        description: "Failure to submit room data. Please try again.",
-      });
-      }
-      */
-  };
+    let cdata = checkResultData[0];
+    let vertices = cdata.room_vertices;
+    let obs_verts = cdata.obstacle_vertices;
+    let navmesh = currentRoom.navmesh;
+    
+    let payload = {
+        room_dict : {
+            vertices: vertices,
+            obstacles: obs_verts
+        },
+        navmesh: navmesh,
+        exts: cdata.extinguisher_vertices,
+        resolution: {"units": 1000}
+    }
 
-  /**
-   * Updates the state of the Room collection
-   * @author Bob YX Lee
-   */
-  function updateRooms(e : any = {}){
-    console.log("Updating Floors!");
-    console.log(e);
-    let floors = e.detail?.Floors;
-    if(floors == null) { return };
-    document.dispatchEvent(new CustomEvent('setAllFloors', {
-      "detail": floors
-    }));
-  }
+    console.log(JSON.stringify(payload));
+
+    try {
+        const response = await axios.post(ENDPOINTS["/ext_solve_all"], payload);
+        let res : any = response.data
+        if(Object.keys(res).includes("error")){
+            console.log("Error occurred");
+            return;
+        }
+        let new_chk : CheckResultProps = checkResultData[0];
+        let cexts = new_chk.extinguisher_vertices;
+        console.log(new_chk);
+        console.log(res);
+        let suggested_exts : number[][] = [];
+        // Skip extinguishers that already exist
+        // Should have a endpoint argument to return all
+        // exts, or only return new exts to avoid to have to do this.
+        for(let n = 0; n < res.exts.length; n++){
+            let ext : number[] = res.exts[n];
+            let present = false;
+            for(let i = 0; i < cexts.length; i++){
+                let cext : number[] = cexts[i];
+                if(vequals(cext, ext)){ present = true; break;}
+            }
+            if(present){ continue; }
+            suggested_exts.push(ext);
+        }
+        console.log(suggested_exts);
+        new_chk.suggested_exts = suggested_exts;
+        setCheckResultData([new_chk]);
+    }catch(err){
+        console.log(err);
+    }
+  };
 
   /**
    * Triggers population of rooms dropdown to get Room info.
