@@ -114,6 +114,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="fire-rvt.addin" />
+    <EmbeddedResource Include="images\Logo.png" />
+    <Content Include="images\Logo.svg" />
     <Content Include="ui\index.html" />
   </ItemGroup>
   <ItemGroup>

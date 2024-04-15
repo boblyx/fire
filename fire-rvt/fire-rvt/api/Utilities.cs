@@ -15,6 +15,10 @@ namespace fire_rvt.api
         public static ForgeTypeId mmTypeId = new ForgeTypeId("autodesk.unit.unit:millimeters-1.0.1");
         public static ForgeTypeId sqmTypeId = new ForgeTypeId("autodesk.unit.unit:squareMeters-1.0.1");
 
+        public static double tmm(double value) {
+            return UnitUtils.ConvertToInternalUnits(value, mmTypeId);
+        }
+
         public static double sqm(double value) {
             return UnitUtils.ConvertFromInternalUnits(value, sqmTypeId);
         }
@@ -203,9 +207,13 @@ namespace fire_rvt.api
             return new NavMesh(vertices, ifaces);
         }
 
+        /// <summary>
+        /// Populates Revit Model with Extinguishers
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="webWindow"></param>
         public static void PlaceExtinguishers(UIApplication app, WebWindow webWindow)
         {
-
             List<FamilySymbol> extFams = api.Info.getExtinguisherSymbols(app);
             FamilySymbol extFam = extFams[0];
             var doc = app.ActiveUIDocument.Document;
@@ -213,17 +221,23 @@ namespace fire_rvt.api
             Debug.WriteLine(extFam.UniqueId);
             Level level = doc.GetElement(webWindow.level_id) as Level;
             double height = level.Elevation;
-            foreach (double[] loc in webWindow.exts_to_place)
+            XYZ dir = new XYZ(1, 0, 0);
+            using (Transaction transaction = new Transaction(doc))
             {
-                XYZ pos = new XYZ(loc[0], loc[1], height);
-                Debug.WriteLine(pos);
-                try
+                foreach (double[] loc in webWindow.exts_to_place)
                 {
-                    doc.Create.NewFamilyInstance(pos, extFam, StructuralType.NonStructural);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
+                    if (transaction.Start("Add Extinguisher") == TransactionStatus.Started)
+                    {
+                        XYZ pos = new XYZ(tmm(loc[0]), tmm(loc[1]), height);
+                        var result = doc.Create.NewFamilyInstance(pos, extFam, dir, level, StructuralType.NonStructural);
+                        if (result != null)
+                        {
+                            if (TransactionStatus.Committed != transaction.Commit())
+                            {
+                                Debug.WriteLine("Failed");
+                            }
+                        }
+                    }
                 }
             }
         }
