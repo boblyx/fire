@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
+using System;
 
 /// <summary>
 /// For executing Revit Routines when called from Web UI
@@ -14,7 +17,8 @@ namespace fire_rvt
         {
             Invalid = -1,
             GetFloors,
-            GetRooms
+            GetRooms,
+            PlaceExtinguishers
         }
 
         private RevitActionsEnum _currentRevitActions;
@@ -38,6 +42,9 @@ namespace fire_rvt
                     break;
                 case RevitActionsEnum.GetRooms:
                     break;
+                case RevitActionsEnum.PlaceExtinguishers:
+                    api.Utilities.PlaceExtinguishers(app, webWindow);
+                    break;
                 default:
                     Debug.WriteLine("Unhandled Action.");
                     break;
@@ -53,5 +60,7 @@ namespace fire_rvt
         {
             return nameof(RevitEventHandler);
         }
+
+        
     }
 }

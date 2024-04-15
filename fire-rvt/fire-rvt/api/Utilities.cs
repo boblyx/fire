@@ -1,11 +1,10 @@
 ﻿using System;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Architecture;
-using Autodesk.Revit.UI.Selection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Autodesk.Revit.DB.Structure;
 /// <summary>
 /// Author: Bob YX Lee
 /// </summary>
@@ -13,6 +12,22 @@ namespace fire_rvt.api
 {
     class Utilities
     {
+        public static ForgeTypeId mmTypeId = new ForgeTypeId("autodesk.unit.unit:millimeters-1.0.1");
+        public static ForgeTypeId sqmTypeId = new ForgeTypeId("autodesk.unit.unit:squareMeters-1.0.1");
+
+        public static double tmm(double value) {
+            return UnitUtils.ConvertToInternalUnits(value, mmTypeId);
+        }
+
+        public static double sqm(double value) {
+            return UnitUtils.ConvertFromInternalUnits(value, sqmTypeId);
+        }
+
+        public static double mm(double value) {
+            //ForgeTypeId mmTypeId = new ForgeTypeId("autodesk.unit.unit:millimeters-1.0.1");
+            return UnitUtils.ConvertFromInternalUnits(value, mmTypeId);
+        }
+
         /// <summary>
         /// QOL utility for checking if geometry is Solid.
         /// </summary>
@@ -155,7 +170,7 @@ namespace fire_rvt.api
                     List<XYZ> verts = new List<XYZ> { v1, v2, v3 };
                     foreach (XYZ vert in verts)
                     {
-                        double[] v = new double[] { vert.X, vert.Y };
+                        double[] v = new double[] { mm(vert.X), mm(vert.Y) };
                         bool has_dup = false;
                         foreach (double[] vi in vertices)
                         {
@@ -190,6 +205,41 @@ namespace fire_rvt.api
                 }
             }
             return new NavMesh(vertices, ifaces);
+        }
+
+        /// <summary>
+        /// Populates Revit Model with Extinguishers
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="webWindow"></param>
+        public static void PlaceExtinguishers(UIApplication app, WebWindow webWindow)
+        {
+            List<FamilySymbol> extFams = api.Info.getExtinguisherSymbols(app);
+            FamilySymbol extFam = extFams[0];
+            var doc = app.ActiveUIDocument.Document;
+            Debug.WriteLine(extFam.FamilyName);
+            Debug.WriteLine(extFam.UniqueId);
+            Level level = doc.GetElement(webWindow.level_id) as Level;
+            double height = level.Elevation;
+            XYZ dir = new XYZ(1, 0, 0);
+            using (Transaction transaction = new Transaction(doc))
+            {
+                foreach (double[] loc in webWindow.exts_to_place)
+                {
+                    if (transaction.Start("Add Extinguisher") == TransactionStatus.Started)
+                    {
+                        XYZ pos = new XYZ(tmm(loc[0]), tmm(loc[1]), height);
+                        var result = doc.Create.NewFamilyInstance(pos, extFam, dir, level, StructuralType.NonStructural);
+                        if (result != null)
+                        {
+                            if (TransactionStatus.Committed != transaction.Commit())
+                            {
+                                Debug.WriteLine("Failed");
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

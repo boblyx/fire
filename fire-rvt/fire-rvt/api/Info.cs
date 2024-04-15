@@ -64,8 +64,8 @@ namespace fire_rvt.api
             this.vertices = vertices;
             this.navmesh = navmesh;
             this.extinguisher_vertices = extinguishers;
-
-            this.area = area;
+            
+            this.area = Utilities.sqm(area);
         }
     }
 
@@ -168,6 +168,20 @@ namespace fire_rvt.api
             return rmlist;
         }
 
+        public static List<FamilySymbol> getExtinguisherSymbols(UIApplication app) {
+            var doc = app.ActiveUIDocument.Document;
+            List<FamilySymbol> outlist = new List<FamilySymbol>();
+            FilteredElementCollector fc = new FilteredElementCollector(doc);//.OfClass(typeof(FamilySymbol));
+            fc.OfCategory(BuiltInCategory.OST_FireAlarmDevices);
+            fc.OfClass(typeof(FamilySymbol));
+            foreach (FamilySymbol fs in fc)
+            {
+                if (!(fs.FamilyName.ToUpper().Contains("EXTINGUISHER"))) { continue;  }
+                outlist.Add(fs);
+            }
+            return outlist;
+        }
+
         /// <summary>
         /// Gets extinguishers inside a room.
         /// </summary>
@@ -178,7 +192,9 @@ namespace fire_rvt.api
         {
             List<double[]> coords = new List<double[]> { };
             var doc = app.ActiveUIDocument.Document;
-            FilteredElementCollector excollect = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance));
+            FilteredElementCollector excollect = new FilteredElementCollector(doc);//.OfClass(typeof(FamilyInstance));
+            excollect.OfCategory(BuiltInCategory.OST_FireAlarmDevices);
+            excollect.OfClass(typeof(FamilyInstance));
             foreach (FamilyInstance fitem in excollect)
             {
                 ElementId typeId = fitem.GetTypeId();
@@ -192,7 +208,7 @@ namespace fire_rvt.api
                 List<XYZ> loc = new List<XYZ>();
                 LocationPoint lp = fitem.Location as LocationPoint;
                 loc.Add(lp.Point);
-                coords.Add(new double[] { loc[0].X, loc[0].Y });
+                coords.Add(new double[] { Utilities.mm(loc[0].X), Utilities.mm(loc[0].Y) });
             }
             return coords;
         }
@@ -258,19 +274,22 @@ namespace fire_rvt.api
                 foreach (BoundarySegment bseg in lbseg)
                 {
                     List<double[]> coords = new List<double[]>();
-                    coords.Add(new double[]{bseg.GetCurve().GetEndPoint(0).X
-                                          ,bseg.GetCurve().GetEndPoint(0).Y
-                                          ,bseg.GetCurve().GetEndPoint(0).Z});
+                    coords.Add(new double[]{
+                        Utilities.mm(bseg.GetCurve().GetEndPoint(0).X)
+                        ,Utilities.mm(bseg.GetCurve().GetEndPoint(0).Y)
+                        ,Utilities.mm(bseg.GetCurve().GetEndPoint(0).Z)
+                    });
 
                     // Line End Point
-                    coords.Add(new double[]{bseg.GetCurve().GetEndPoint(1).X
-                                          ,bseg.GetCurve().GetEndPoint(1).Y
-                                          ,bseg.GetCurve().GetEndPoint(1).Z});
+                    coords.Add(new double[]{
+                        Utilities.mm(bseg.GetCurve().GetEndPoint(1).X)
+                        ,Utilities.mm(bseg.GetCurve().GetEndPoint(1).Y)
+                        ,Utilities.mm(bseg.GetCurve().GetEndPoint(1).Z)
+                    });
                     lines.Add(coords);
                 }
                 loops.Add(lines);
             }
-            //Debug.WriteLine(loops);
             return loops;
         }
     }
