@@ -216,6 +216,12 @@ const SelectForm: React.FC<ResultProps> = ({
                 let cext : number[] = cexts[i];
                 if(vequals(cext, ext)){ present = true; break;}
             }
+            // HACK: Ignore errors from solver
+            // Where same point is suggested over and over again.
+            for(let i = 0; i < suggested_exts.length; i++){
+              let cext : number[] = suggested_exts[i];
+              if(vequals(cext,ext)){present = true; break;}
+            }
             if(present){ continue; }
             suggested_exts.push(ext);
         }

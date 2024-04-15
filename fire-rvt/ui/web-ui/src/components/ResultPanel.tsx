@@ -3,7 +3,6 @@
  * results of AI evaluation are shown.
  */
 import React, { useState, useEffect, useContext} from "react";
-import axios from "axios";
 
 import { Button } from "../components/ui/button";
 import { useToast } from "../components/ui/use-toast";
@@ -39,13 +38,15 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
 
   const exportExtinguisherPlacement = async () => {
     try {
-      // Question: Only export infer results to Revit?
-      // TODO: To replace with actual API endpoint
-      const payload = inferResults;
-      await axios.post(
-        "https://your-api-endpoint.com/exportExtinguisher",
-        payload,
-      );
+      
+      // call Revit Event
+      let w = window as any;
+      let sgexts = checkResultData[0].suggested_exts; 
+      let wv2msg = { "action": "placeExtinguishers", "payload": sgexts }
+      console.log("Exporting extinguishers!");
+      console.log(wv2msg);
+      w.chrome?.webview?.postMessage(wv2msg);
+
       toast({
         variant: "success",
         title: "Success!",
