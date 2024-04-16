@@ -29,8 +29,11 @@ namespace fire_rvt
             RibbonPanel ribbon = a.CreateRibbonPanel("Fire", "Check");
 
             string thisAssembly = Assembly.GetExecutingAssembly().Location;
-
+            Stream imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("fire_rvt.images.Logo.png");
+            Image iconImg = Image.FromStream(imgStream);
             PushButtonData showPane = new PushButtonData("Start App", "Start App", thisAssembly, "fire_rvt.WebCommand");
+            showPane.LargeImage = Utilities.ToImageSource(iconImg, ImageFormat.Png);
+
             RibbonItem show = ribbon.AddItem(showPane);
             return Result.Succeeded;
         }
