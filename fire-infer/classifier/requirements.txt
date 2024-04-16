@@ -1,0 +1,8 @@
+numpy==1.26.4
+pandas==2.2.1
+scikit-learn==1.4.0
+scipy==1.12.0
+xgboost==2.0.3
+typing-extensions==4.10.0
+shapely==2.0.3
+flask==3.0.3

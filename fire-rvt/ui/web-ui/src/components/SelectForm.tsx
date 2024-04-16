@@ -102,6 +102,16 @@ const SelectForm: React.FC<ResultProps> = ({
   useEffect(() => {
   }, [floorNameValue]);
 
+  let use_ai = false;
+
+  function toggleAI(){
+    if(use_ai == false){
+      use_ai = true;
+    }else{
+      use_ai = false;
+    }
+  }
+
   /**
    * TODO: Scale vertices if they are too small.
    * @author Bob YX Lee

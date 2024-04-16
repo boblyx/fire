@@ -42,7 +42,8 @@ const ResultPanel: React.FC<ResultProps> = ({ checkResults, inferResults }) => {
       // call Revit Event
       let w = window as any;
       let sgexts = checkResultData[0].suggested_exts; 
-      let wv2msg = { "action": "placeExtinguishers", "payload": sgexts }
+      let payload = {"extinguishers": sgexts, "room": currentRoom.id, "level": currentRoom.level};
+      let wv2msg = { "action": "placeExtinguishers", "payload": payload }
       console.log("Exporting extinguishers!");
       console.log(wv2msg);
       w.chrome?.webview?.postMessage(wv2msg);
