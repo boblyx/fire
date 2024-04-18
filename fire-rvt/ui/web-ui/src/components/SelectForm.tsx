@@ -41,6 +41,7 @@ const ENDPOINTS = {
 
     "/check/coverage": "http://localhost:41983/check/coverage"
     ,"/ext_solve_all": "http://localhost:41983/ext_solve_all"
+    ,"ai/check": "http://localhost:5000/predict"
 }
 // TODO: Props to be changed based on result output of AI model
 interface ResultProps {
@@ -182,6 +183,21 @@ const SelectForm: React.FC<ResultProps> = ({
     return true;
   }
 
+  const inferExtinguisherCompliance = async (values: z.infer<typeof formSchema>) =>{
+    let cdata = checkResultData[0];
+    let vertices = cdata.room_vertices;
+    let extinguishers = cdata.extinguisher_vertices;
+    let payload = {"room": vertices, "extinguishers": extinguishers };
+
+    const response = await axios.post(ENDPOINTS["ai/check"], payload);
+    let res : any = response.data
+    if(Object.keys(res).includes("error")){
+        console.log("Error occurred");
+        return;
+    }
+    console.log(res);
+  }
+
   // Handle form submit for inference
   // TODO: Stub function to do post request to fire infer API to do check. Change the API URL accordingly.
   const inferExtinguisherPlacement = async (
@@ -308,7 +324,8 @@ const SelectForm: React.FC<ResultProps> = ({
     <div className="border border-primary/10 rounded-md bg-gray-200 drop-shadow-md h-full p-3">
       <Form {...form}>
         <form
-          onSubmit={handleSubmit(checkExtinguisherPlacement)}
+          //AI: inferExtinguisherComliance RB: checkExtinguisherPlacement
+          onSubmit={handleSubmit(checkExtinguisherPlacement)}//inferExtinguisherCompliance)}//checkExtinguisherPlacement)}
           className="space-y-4"
         >
           <FormField

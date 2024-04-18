@@ -1,10 +1,20 @@
+"""
+run.py
+
+Starts Flask API server for inference checking
+"""
 from flask import Flask, request, jsonify
 import numpy as np
 import xgboost as xgb
+from flask_cors import CORS
 import joblib
+from time import time
 from functions import calculate_area, calculate_distances_to_center, calculate_perimeter, calculate_std_dev_distances_to_center, vertex_to_extinguisher_distances
 
+__author__= "Yuji Fujinami"
+
 app = Flask(__name__)
+CORS(app)
 
 # Load trained XGBoost model 
 model = xgb.Booster()
@@ -15,6 +25,8 @@ scaler = joblib.load('scaler.pkl')
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    print("POST Request received on /predict!")
+    start_time = time()
     try:
         # Extract data from the received JSON
         data = request.get_json(force=True)
@@ -47,8 +59,12 @@ def predict():
         # Make prediction
         pred_prob = model.predict(data_matrix)
         pred = (pred_prob >= 0.5).astype(int)
+        end_time = time()
+        runtime = (end_time - start_time) * 1000;
+        print("Compliance classification completed in %1.2fms" % runtime)
         return jsonify({'prediction': pred.tolist()})
     except Exception as e:
+        print(e);
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':

@@ -8,6 +8,7 @@ __author__ = "Bob YX Lee"
 import json
 import sys
 import os
+from time import time
 from uuid import uuid4
 from pprint import pprint
 
@@ -100,7 +101,7 @@ class SolveOptions(BaseModel):
     pass
 
 """
-SOLVER
+SOLVER ENDPOINTS
 """
 @app.post("/ext_solve_all")
 async def ext_solve_all(
@@ -113,11 +114,15 @@ async def ext_solve_all(
     """
     Use rule based solver to propose extinguisher locations.
     """
+    st = time()
     rm = Room.fromDict(room_dict.__dict__)
     res = {"exts": []}
     exslt = rm.gExtSlots(resolution.__dict__["units"])
     try:
         res["exts"] = rm.extSolve(navmesh.__dict__, exslt, exts, solve_options["skip_travel"])
+        et = time()
+        rt = (et - st) * 1000
+        print("Extinguisher placement completed in %1.2fms!" % rt)
     except Exception as e:
         print(e)
         result = {"error": "Error occured...!"}
@@ -137,6 +142,7 @@ async def check_coverage(
     For a given room and extinguisher slots,
     compute whether pass 1 succeeds
     """
+    st = time()
     room = Room.fromDict(room_dict.__dict__)
     try:
         cover_compliance = room.extCoverChk(exts)
@@ -148,12 +154,15 @@ async def check_coverage(
     res = {"cover": cover_compliance, 
            "travel": travel_compliance,
            "comply": False}
-    print(res)
+    #print(res)
     print("\t1.Coverage Compliance %s" % str(cover_compliance["result"]))
     print("\t2.Travel Compliance %s" % travel_compliance["result"])
     if(travel_compliance["result"] == "PASS" and cover_compliance["result"] == True):
         res["comply"] = True
     # Then check route
+    et = time()
+    rt = (et - st) * 1000
+    print("Coverage checks completed in %1.2fms!" % rt)
     return res
 
 @app.post("/solve/coverage")
