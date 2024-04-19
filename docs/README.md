@@ -3,7 +3,7 @@
 
 ## Workflows
 ### 1. Synthetic Data
-1. Randomly generate floor plans and columns based on building footprint + random divisions.
+1. `fire-synth` randomly generate floor plans and columns based on building footprint + random divisions.
 1. Pipe footprint and obstacles to `fire-opt`
 1. Using rule based methods, iterate through all possible placements for fire extinguishers along walls and structural obstacles.
     1. Evaluate using 1st pass circle based evaluation
@@ -14,6 +14,7 @@
     1. Extinguisher placement (as 2xN vector)
     1. Extinguisher coverage (as 2xP vector)
     1. Travel route to extinguisher (as 2xL vector)
+    1. Compliance (0 for fail, 1 for pass)
 
 ### 2. AI Training
 1. For each data item, vectorize all paths / boundaries.
@@ -31,3 +32,4 @@
 1. On Extinguisher page, user can press "Infer" to send room boundaries and obstacles to `fire-infer`
 1. On backend, `fire-infer` calls `fire-svg` whenever conversions to or from svg is required.
 1. Outputs on `fire-infer` are received as response, and results are rendered on WebView2 as SVG.
+1. On pressing export in `fire-rvt` the Revit model is populated with the appropriate families.
