@@ -7,7 +7,7 @@ TODO:
 - [ ] Add random obstacles for synth
 """
 __author__ = "Bob YX Lee"
-
+import os
 from copy import deepcopy
 from pprint import pprint
 import random
@@ -20,9 +20,6 @@ from .Line2D import slotsFromLines
 
 import pyclipper
 import numpy as np
-import requests
-
-FIRE_ROUTE = "http://localhost:41982/travel"; # TODO: Transfer to .env
 
 def randRect(widths = list(range(5000,10000)),
              depths = list(range(5000,7000)),

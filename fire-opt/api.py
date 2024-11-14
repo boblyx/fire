@@ -23,7 +23,9 @@ from geom.Room import Room
 
 app = FastAPI()
 host = "0.0.0.0"
-port = 41983
+env = os.environ
+port = int(env["API_PORT"])
+
 
 origins =["*"]
 app.add_middleware(
