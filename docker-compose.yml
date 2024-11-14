@@ -3,6 +3,8 @@ services:
     build: ./fire-ui
     environment:
       REACT_APP_API_FIRE_OPT: http://localhost:41983
+    ports:
+      - 41984:3000
 
   opt:
     build: ./fire-opt
