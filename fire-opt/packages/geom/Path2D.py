@@ -5,10 +5,12 @@ Convenience functions for paths.
 import numpy as np
 import drawsvg as dw
 import requests
+import os
 
 from .Line2D import distance2D
+env= os.environ
 
-FIRE_ROUTE = "http://localhost:41982/travel"
+FIRE_ROUTE = env["API_FIRE_ROUTE"] #"http://localhost:41982/travel"
 
 def pathLength(path):
     """

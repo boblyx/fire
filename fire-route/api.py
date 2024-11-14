@@ -7,7 +7,7 @@ Instead, we use the Navmesh method.
 """
 
 __author__ = "Bob YX Lee"
-
+import os
 import json
 from uuid import uuid4
 
@@ -17,9 +17,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from FireRoute import Compute
 
+env = os.environ
+
 app = FastAPI()
 host = "0.0.0.0"
-port = 41982
+
+port = int(env["API_PORT"])
+
 
 origins =["*"]
 app.add_middleware(

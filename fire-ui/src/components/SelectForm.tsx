@@ -37,10 +37,11 @@ import {
 import { SAMPLE_FLOORS } from "./samples/floor_exts";
 import { CheckResultProps, InferResultProps } from "./Interfaces";
 import { RoomProps, FloorProps } from "../contexts/ResultContext";
+const API_FIRE_OPT = process.env.REACT_APP_API_FIRE_OPT;
 const ENDPOINTS = {
 
-    "/check/coverage": "http://localhost:41983/check/coverage"
-    ,"/ext_solve_all": "http://localhost:41983/ext_solve_all"
+    "/check/coverage": `${API_FIRE_OPT}/check/coverage`
+    ,"/ext_solve_all": `${API_FIRE_OPT}/ext_solve_all`
     ,"ai/check": "http://localhost:5000/predict"
 }
 // TODO: Props to be changed based on result output of AI model
