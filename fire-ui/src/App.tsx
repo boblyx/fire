@@ -4,8 +4,9 @@ import Landing from "./pages/Landing";
 import ExtinguisherPlan from "./components/ExtinguisherPlan";
 import HosereelPlan from "./components/HosereelPlan";
 import { ResultContextProvider } from "./contexts/ResultContext";
-import NotFound from "./pages/NotFound";
+//import NotFound from "./pages/NotFound";
 
+//{/*<Route path="*" element={<NotFound />} /> {/* Catch-all route */*/}
 const App = () => {
   return (
     <div className="App">
@@ -15,7 +16,6 @@ const App = () => {
             <Route path="/extinguisher-plan" element={<ExtinguisherPlan />} />
             <Route path="/hosereel-plan" element={<HosereelPlan />} />
           </Route>
-          <Route path="*" element={<NotFound />} /> {/* Catch-all route */}
         </Routes>
       </ResultContextProvider>
     </div>

@@ -33,6 +33,22 @@ Open [http://localhost:3000/index.html](http://localhost:3000/index.html) to vie
 
 The app has to be mounted on index.html route in order to work with Revit WebView2.
 
+## Deployment
+1. Build using `docker compose build`, modifying env variables as needed.
+2. To host on a path e.g., `/fire`, a reverse proxy is required. For NGINX, it can be something like:
+```
+location /fire  {
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Host $host;
+    proxy_redirect     off;
+    proxy_set_header   Host $host;
+    rewrite /app/(.*) /$1 break;
+    proxy_pass http://127.0.0.1:41984/fire;
+}
+```
+3. Then run using `docker compose up -d`
+
 ## Contributors
 - Yuji Fujinami: UI / UX implementation
 - Bob YX Lee: Integration with Revit & API

@@ -72,7 +72,7 @@ const Landing = () => {
   return (
     <div className="w-full h-full py-5 px-10 overflow-hidden">
       <div className="flex justify-start space-x-3 mb-4 font-bold text-3xl">
-        <div>Fire AI</div>
+        <div>Fire</div>
         <Flame size={36} />
       </div>
       <Separator />

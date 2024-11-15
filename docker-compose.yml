@@ -1,22 +1,32 @@
 services:
   front:
-    build: ./fire-ui
-    environment:
-      REACT_APP_API_FIRE_OPT: http://localhost:41983
+    restart: always
+    build: 
+      context: ./fire-ui
+      args:
+        - REACT_APP_API_FIRE_OPT=/apps/fire-api/opt
+        - REACT_APP_BASE_PATH=/
+        - PUBLIC_URL=/
+    image: fire-front:latest
     ports:
       - 41984:3000
 
   opt:
+    restart: always
     build: ./fire-opt
-    environment:
+    image: fire-opt:latest
+    environment: 
+      BASE_PATH: /apps/fire-api/opt
       API_PORT: 80
       API_FIRE_ROUTE: http://route/travel
     ports:
       - 41983:80
 
   route:
+    restart: always
     build: ./fire-route
+    image: fire-route:latest
     environment:
       API_PORT: 80
-    ports:
-      - 41982:80
+    ports: []
+      #- 41982:80
